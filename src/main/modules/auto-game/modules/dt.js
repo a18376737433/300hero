@@ -1,0 +1,48 @@
+import * as dm from '../../dm'
+import XY from '../utlis/xy'
+import KEY from '../utlis/key'
+import { isBan, sleep, leftClick, checkedRole, isCheckedRole, isInHall } from '../utlis'
+import Store from 'electron-store'
+
+const _entry = [
+  XY.play,
+  XY.zc,
+  XY.zc_dryx
+  // XY.del,
+  // XY.del_dryx
+  // XY.xlc,
+  // XY.xlc_dryx
+]
+export async function useHall(hwnd) {
+  const { role: _role } = this.config.qs
+
+  console.log('大厅界面')
+  await sleep(2000)
+  //关闭更新公告
+  dm.keyPress(KEY['enter'])
+  leftClick(...XY['gxgg_gb'].xy)
+
+  //禁赛处理  ToDo jjc禁赛可能会影响到判断
+  while (isBan() && this.state == 'dt') {
+    console.log('禁赛中')
+    await sleep(60 * 1000)
+  }
+  //进入选人界面
+  for (const { xy, desc, delay = 100 } of _entry) {
+    leftClick(...xy)
+    //console.log(desc)
+    await sleep(delay)
+  }
+  //选择角色
+  for (const { name } of _role) {
+    await sleep(500)
+    checkedRole(name, hwnd)
+    await sleep(1000)
+    if (isCheckedRole()) {
+      leftClick(...XY['cj'].xy)
+      this.matchInfo.role = name
+      break
+    }
+  }
+  isInHall() && useHall(hwnd)
+}

@@ -1,0 +1,26 @@
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+.flex {
+  &+.flex{
+    margin-left: 2rem;
+  }
+  display: flex;
+  align-items: center;
+}
+.el-input,.el-select{
+  &.no-border{
+    .el-input__inner{
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-radius: 0;
+    }
+    
+  }
+}
+.el-checkbox__input.is-checked+.el-checkbox__label{
+  color: #333 !important;
+}
