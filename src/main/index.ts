@@ -1,20 +1,20 @@
-import { app, BrowserWindow, ipcMain, globalShortcut, autoUpdater } from 'electron'
+import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join, resolve } from 'path'
 import is_dev from 'electron-is-dev'
-import updateApp from 'update-electron-app'
+import { autoUpdater } from 'electron-updater'
+const log = require('electron-log')
 
 import dotenv from 'dotenv'
 import Store from 'electron-store'
 import { useMenu } from './modules/menu'
 import { useTray } from './modules/tray'
+import AutoUpdate from './modules/autoUpdate'
 import { useGlobalShortcut } from './modules/globalShortcut'
-
 import game from './modules/auto-game'
 import { getGameCount } from './modules/auto-game/utlis'
-updateApp({
-  repo: 'github-user/repo',
-  updateInterval: '1 hour'
-})
+
+new AutoUpdate()
+console.log('version', app.getVersion())
 dotenv.config({ path: join(__dirname, '../../.env') })
 ipcMain.on('onWindow', (e, state) => {
   switch (state) {
@@ -51,9 +51,9 @@ let win
 function createWindow() {
   win = new BrowserWindow({
     width: is_dev ? 1280 : 900,
-    height: 600,
+    height: 700,
     icon: join(__dirname, '../render/1.ico'),
-    title: process.env.APP_NAME,
+    title: `${app.getName()} v${app.getVersion()}`,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true
@@ -83,4 +83,4 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
-app.setAppUserModelId(process.env.APP_NAME! || '300hero')
+app.setAppUserModelId(app.getName() || '300hero')

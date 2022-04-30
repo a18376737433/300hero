@@ -1,9 +1,14 @@
 {
   "name": "300hero",
-  "version": "1.0.1",
+  "productName": "300英雄助手",
+  "version": "1.0.2",
   "main": "dist/main/index.js",
   "author": "Plusl",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/a18376737433/300hero.git"
+  },
   "scripts": {
     "dev": "npm run dev:all",
     "dev:all": "set NODE_ENV=development && concurrently -n=vue,ele -c=green,blue \"npm run dev:vue\" \"npm run dev:ele\"",
@@ -30,13 +35,6 @@
       "from": "./src/main/library/",
       "to": "library"
     },
-    "mac": {
-      "icon": "./dist/render/icon.ico",
-      "artifactName": "${productName}_setup_${version}.${ext}",
-      "target": [
-        "dmg"
-      ]
-    },
     "win": {
       "icon": "./dist/render/icon.ico",
       "requestedExecutionLevel": "highestAvailable",
@@ -48,7 +46,7 @@
           ]
         }
       ],
-      "artifactName": "${productName}_setup_${version}.${ext}"
+      "artifactName": "${productName}_win32-ia32_${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -59,9 +57,10 @@
   },
   "dependencies": {
     "electron-is-dev": "^1.2.0",
+    "electron-log": "^4.4.6",
     "electron-store": "^6.0.0",
+    "electron-updater": "^5.0.1",
     "element-plus": "1.0.2-beta.33",
-    "update-electron-app": "^2.0.1",
     "vue": "^3.0.7",
     "winax": "^3.3.2"
   },

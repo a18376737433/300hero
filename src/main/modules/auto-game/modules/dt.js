@@ -14,7 +14,7 @@ const _entry = [
   // XY.xlc_dryx
 ]
 export async function useHall(hwnd) {
-  const { role: _role } = this.config.qs
+  const { role: _role, isRandom } = this.config.qs
 
   console.log('大厅界面')
   await sleep(2000)
@@ -34,15 +34,25 @@ export async function useHall(hwnd) {
     await sleep(delay)
   }
   //选择角色
-  for (const { name } of _role) {
+  if (isRandom) {
+    leftClick(...XY['cj'].xy)
     await sleep(500)
-    checkedRole(name, hwnd)
-    await sleep(1000)
-    if (isCheckedRole()) {
-      leftClick(...XY['cj'].xy)
-      this.matchInfo.role = name
-      break
+    dm.keyPress(KEY['enter'])
+    await sleep(500)
+    leftClick(...XY['cj'].xy)
+    this.matchInfo.role = '随机'
+  } else {
+    for (const { name } of _role) {
+      await sleep(500)
+      checkedRole(name, hwnd)
+      await sleep(1000)
+      if (isCheckedRole()) {
+        leftClick(...XY['cj'].xy)
+        this.matchInfo.role = name
+        break
+      }
     }
   }
+
   isInHall() && useHall(hwnd)
 }

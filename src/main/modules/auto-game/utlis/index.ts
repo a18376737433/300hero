@@ -109,17 +109,18 @@ export const KN_R = async () => {
   await sleep(300)
   dm.keyPress(KEY['t'])
 }
-export const useSkill = async ({ skill, equip, jd, lt, sq_index, zb_index, isSpring, color }, isDebug) => {
+export const useSkill = async ({ skill, equip, jd, lt, sq_index, zb_index, isSpring, name, color }, isDebug) => {
   type XyMap = {
     [name: string]: [number, number]
   }
   const camp: XyMap = {
-    RED: [1265, 560], //在左边时对面水晶的位置
-    BLUE: [1039, 790] //在右边时对面水晶的位置
+    RED: [1261, 560], //在左边时对面水晶的位置
+    BLUE: [1042, 787] //在右边时对面水晶的位置
   }
   const offset: XyMap = {
-    RED: [975, 78], //在左边时的偏移量
-    BLUE: [323, 695] //在右边时的偏移量
+    RED: [1003, 65], //在左边时的偏移量
+    // BLUE: [330, 720] //在右边时的偏移量
+    BLUE: [336, 742]
   }
   //雷霆 r 战法
   //975,78
@@ -145,18 +146,29 @@ export const useSkill = async ({ skill, equip, jd, lt, sq_index, zb_index, isSpr
     await sleep(300)
   }
   dm.keyPress(KEY[skill])
-  await sleep(200)
-  dm.keyPress(KEY[skill])
-  await sleep(200)
-  dm.keyPress(KEY[skill])
-  await sleep(200)
-  dm.keyPress(KEY[skill])
+  if (name == '黑羽快斗') {
+    await sleep(1100)
+    dm.keyPress(KEY[skill])
+    await sleep(100)
+    dm.keyPress(KEY[skill])
+  }
+
+  //console.log(KEY[skill])
+  // await sleep(250)
+  // dm.keyPress(KEY[skill])
+  // console.log(KEY[skill])
+  // await sleep(250)
+  // dm.keyPress(KEY[skill])
+  // console.log(KEY[skill])
+  // await sleep(100)
+  // dm.keyPress(KEY[skill])
+  // console.log(KEY[skill])
   if (jd || lt) {
-    await sleep(250)
+    await sleep(400)
     unEquip(zb_index)
   }
   if (jd) {
-    await sleep(250)
+    await sleep(500)
     clickPack(jd) //装备 鸡刀
   }
   if (equip.length && !isSpring) {
@@ -164,7 +176,7 @@ export const useSkill = async ({ skill, equip, jd, lt, sq_index, zb_index, isSpr
     for (const e of equip) {
       await useProp(e)
     }
-    await sleep(3000)
+    await sleep(3300)
   }
 
   if (jd || lt) {
@@ -266,15 +278,16 @@ export const useLock = async () => {
   }
 }
 export const isInHall = () => {
-  let result1 = !!dm.findPic(579, 0, 709, 80, './img/hall1.bmp', '000000', 0.8, 0)
-  let result2 = !!dm.findPic(579, 0, 709, 80, './img/hall2.bmp', '000000', 0.8, 0)
+  let result1 = !!dm.findPic(579, 0, 709, 80, './img/hall1.bmp', '000000', 0.7, 0)
+  let result2 = !!dm.findPic(579, 0, 709, 80, './img/hall2.bmp', '000000', 0.7, 0)
   return result1 || result2
 }
 export const isInLogin = () => {
   return !!dm.findPic(1157, 210, 1238, 281, './img/login.bmp', '000000', 0.8, 0)
 }
 export const isGameing = () => {
-  return !!dm.findColor(400, 786, 413, 797, '209c31', 0.8, 0) || !!dm.findColor(400, 786, 413, 797, '184B0F', 0.8, 0)
+  //return !!dm.findColor(400, 786, 413, 797, '209c31', 0.8, 0) || !!dm.findColor(400, 786, 413, 797, '184B0F', 0.8, 0)
+  return !!dm.findColor(400, 786, 413, 797, '209c31', 0.8, 0)
 }
 export const useClickLike = async () => {
   dm.keyDown(KEY['tab'])

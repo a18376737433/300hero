@@ -32,15 +32,20 @@ class GameEvent {
   }
   async start() {
     if (this._timeId) return
-
     this.findGameWindow()
 
     if (!this.hwnd) return
     dm.dll.Beep(800, 800)
     console.log('脚本开始')
+    dm.dll.SetWindowText(this.hwnd, 'tysb')
     dm.setWindowState(this.hwnd, 1)
     this.config = new Store().get('config') || {}
     dm.setPath(libDir)
+    global.win.webContents.send('match:update', {
+      match: this.matchInfo,
+      count: this.gameCount
+    })
+    //ToDo  大厅背景可能导致不正常
     this._timeId = setInterval(() => {
       if (isGameing()) {
         this.state = 'zc'
@@ -60,7 +65,7 @@ class GameEvent {
     if (!this._timeId) return
     dm.dll.Beep(500, 500)
 
-    console.log('脚本停止')
+    console.log(`[${new Date().toLocaleString()}]`, '脚本停止')
     // dm.unBindWindow()
     clearInterval(this._timeId)
     this._timeId = null

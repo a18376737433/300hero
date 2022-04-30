@@ -6,6 +6,7 @@ const loaded = () => {
   const appLoading = document.getElementById('appLoading')
   if (appLoading) appLoading.style.display = 'none'
 }
+
 let preConfig = ipcRenderer.sendSync('store:get', 'config')
 const config = reactive(
   preConfig || {
@@ -14,6 +15,8 @@ const config = reactive(
       password: ''
     },
     qs: {
+      //随机英雄
+      isRandom: false,
       //游戏局数
       gameCount: 50,
       //检测间隔/s
@@ -48,7 +51,7 @@ const role = reactive({
 watch(
   () => config.qs.role,
   (v) => {
-    role.iptVal = v.map((item) => item.name).toString()
+    role.iptVal = v?.map((item) => item.name).toString()
     role.option = v
   },
   {
@@ -63,7 +66,7 @@ watch(
       return
     }
     role.option = role.iptVal.split(/,|，/).map((e) => {
-      let result = role.option.find((item) => item.name === e)
+      let result = role.option?.find((item) => item.name === e)
       if (result) {
         return result
       } else {
@@ -95,7 +98,6 @@ const matchInfo = reactive({
 })
 matchInfo.count = ipcRenderer.sendSync('store:get', 'gameCount') || 0
 ipcRenderer.on('match:update', (e, { count, match }) => {
-  console.log(match)
   matchInfo.count = count
   matchInfo.match = match
 })
@@ -275,6 +277,10 @@ const equipSelectOption = [
           <div class="flex" v-show="config.qs.reconnect">
             <el-input style="width: 150px" placeholder="账号" class="no-border" show-password v-model="config.user.name" />
             <el-input style="width: 150px" placeholder="密码" class="no-border" show-password v-model="config.user.password" />
+            <div class="flex">
+              <div>随机角色</div>
+              <el-switch v-model="config.qs.isRandom" />
+            </div>
           </div>
         </div>
       </el-form-item>
