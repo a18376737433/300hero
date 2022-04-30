@@ -15,4 +15,6 @@ jobs:
       - name: 安装依赖 # 使用yarn 安装依赖
         run: yarn
       - name: build vue and ele
+        env: 
+          GITHUB_TOKEN: ${{secrets.BUILD_TOKEN}}
         run: yarn build
