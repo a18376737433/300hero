@@ -39,5 +39,11 @@ jobs:
           tag_name: ${{ steps.package-version.outputs.version }}
           release_name: ${{ steps.package-version.outputs.version }}
           prerelease: false # 是否为预发布版本
-
+      - name: 上传exe
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.BUILD_TOKEN }}
+        with:
+          upload_url: ${{ steps.release_tag.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: dist
 
