@@ -1,33 +1,18 @@
-# This is a basic workflow to help you get started with Actions
-
-name: autoUpdate
-
-# Controls when the workflow will run
+name: CI
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches: [ master ]
   workflow_dispatch:
-
 jobs:
   build:
-   runs-on: windows-latest
+    runs-on: windows-latest
     steps:
-    -name: echo hello vue
-      # - uses: actions/checkout@v3
-      #   run: echo Hello Actions
-      # - name: 安装yarn
-      #   run: npm i yarn
-      # - name: 安装依赖
-      #   run: yarn
-      # - name: 打包项目
-      #   run: yarn build
-      # - name: 读取 package.json
-      #   uses: tyankatsu0105/read-package-version-actions@v1
-      #   run:
-      # - name: 根据 Tag 创建 Release 
-      #   use: actions/create-release@v1
+      - uses: actions/checkout@v3
+      - name: 安装yarn
+        run:  npm i -g yarn
+      - name: 安装依赖 # 使用yarn 安装依赖
+        run: yarn
+      - name: build vue and ele
+        run: yarn build
