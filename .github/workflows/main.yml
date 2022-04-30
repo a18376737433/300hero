@@ -11,10 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: 安装yarn 
-        run:  npm i yarn&&yarn -v
-      - name: 步骤1
-        run: echo 001
-      - name: 步骤2
-        run: |
-          echo 步骤2,
-          echo 步骤2.1.
+        run:  |
+          npm i yarn,
+          yarn -v
