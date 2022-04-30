@@ -15,10 +15,11 @@ on:
 
 jobs:
   build:
-   runs-on: ubuntu-latest
+   runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
-        run: echo Hello Actions
+    -name: echo hello vue
+      # - uses: actions/checkout@v3
+      #   run: echo Hello Actions
       # - name: 安装yarn
       #   run: npm i yarn
       # - name: 安装依赖
