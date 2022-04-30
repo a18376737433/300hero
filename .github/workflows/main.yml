@@ -21,12 +21,7 @@ jobs:
           GITHUB_TOKEN: ${{secrets.BUILD_TOKEN}}
         run: yarn build
       - name: cleanup artifacts
-        run: |
-          npx rimraf "dist/win-ia32-unpacked",
-          npx rimraf "dist/render",
-          npx rimraf "dist/main",
-          npx rimraf "dist/builder-debug.yml",
-          npx rimraf "dist/builder-effective-config.yaml"
+        run: npx rimraf "dist/win-ia32-unpacked"&&npx rimraf "dist/win-ia32-unpacked"&&npx rimraf "dist/render"&& npx rimraf "dist/main"&&npx rimraf "dist/builder-debug.yml"&&npx rimraf "dist/builder-effective-config.yaml"
       - name: upload dist
         uses: actions/upload-artifact@v2
         with:
