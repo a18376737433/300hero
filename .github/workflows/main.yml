@@ -18,3 +18,8 @@ jobs:
         env: 
           GITHUB_TOKEN: ${{secrets.BUILD_TOKEN}}
         run: yarn build
+      - name: upload dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist1
+          path: dist
