@@ -20,9 +20,9 @@ jobs:
         run: yarn build
       - name: cleanup artifacts
         run: |
-          npx rimraf "dist1/!*.blockmap"
+          npx rimraf "dist/!(*.exe|*.blockmap|latest.yml)"
       - name: upload dist
         uses: actions/upload-artifact@v2
         with:
-          name: dist1
+          name: dist
           path: dist
