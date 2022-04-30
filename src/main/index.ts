@@ -14,7 +14,7 @@ import game from './modules/auto-game'
 import { getGameCount } from './modules/auto-game/utlis'
 
 new AutoUpdate()
-console.log('version', app.getVersion())
+console.log(' version ', app.getVersion())
 dotenv.config({ path: join(__dirname, '../../.env') })
 ipcMain.on('onWindow', (e, state) => {
   switch (state) {
