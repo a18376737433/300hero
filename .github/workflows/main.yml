@@ -10,9 +10,34 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
+      - name: 安装Node.js
+        uses: actions/setup-node@v2-beta
       - name: 安装yarn
         run:  npm i -g yarn
       - name: 安装依赖 # 使用yarn 安装依赖
         run: yarn
       - name: build vue and ele
+        env: 
+          GITHUB_TOKEN: ${{secrets.BUILD_TOKEN}}
         run: yarn build
+      - name: cleanup artifacts
+        run: npx rimraf "dist/win-ia32-unpacked"&&npx rimraf "dist/win-ia32-unpacked"&&npx rimraf "dist/render"&& npx rimraf "dist/main"&&npx rimraf "dist/builder-debug.yml"&&npx rimraf "dist/builder-effective-config.yaml"
+      - name: upload dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+      - name: 读取package.json
+        uses: tyankatsu0105/read-package-version-actions@v1
+        id: package-version
+      - name: Create Release for Tag
+        id: release_tag
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.BUILD_TOKEN }} # 这块需要用到 github的token，因为需要对分之进行代码推送
+        with:
+          tag_name: ${{ steps.package-version.outputs.version }}
+          release_name: ${{ steps.package-version.outputs.version }}
+          prerelease: false # 是否为预发布版本
+
+
