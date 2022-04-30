@@ -10,9 +10,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-      - name: 安装yarn 
-        run:  |
-          npm i yarn,
-          yarn
+      - name: 安装yarn
+        run:  npm i -g yarn
+      - name: 安装依赖 # 使用yarn 安装依赖
+        run: yarn
       - name: build vue and ele
         run: yarn build
