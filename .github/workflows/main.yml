@@ -10,6 +10,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
+      - name: 安装Node.js
+        uses: actions/setup-node@v2-beta
       - name: 安装yarn
         run:  npm i -g yarn
       - name: 安装依赖 # 使用yarn 安装依赖
@@ -20,7 +22,7 @@ jobs:
         run: yarn build
       - name: cleanup artifacts
         run: |
-          npx rimraf "dist/!(*.exe)"
+          npx rimraf "dist/!(*.exe|*.yml)"
       - name: upload dist
         uses: actions/upload-artifact@v2
         with:
