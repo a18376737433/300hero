@@ -18,6 +18,9 @@ jobs:
         env: 
           GITHUB_TOKEN: ${{secrets.BUILD_TOKEN}}
         run: yarn build
+      - name: cleanup artifacts
+        run: |
+          npx rimraf "dist/!*.blockmap"
       - name: upload dist
         uses: actions/upload-artifact@v2
         with:
