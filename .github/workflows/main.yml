@@ -13,4 +13,6 @@ jobs:
       - name: 安装yarn 
         run:  |
           npm i yarn,
-          yarn -v
+          yarn
+      - name: build vue and ele
+        run: yarn build
