@@ -22,7 +22,7 @@ jobs:
         run: yarn build
       - name: cleanup artifacts
         run: |
-          npx rimraf \"dist/!(*.exe|*.yml)\"
+          npx rimraf "dist/!(*.exe) dist/!(*.yml)"
       - name: upload dist
         uses: actions/upload-artifact@v2
         with:
