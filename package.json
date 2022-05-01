@@ -21,6 +21,9 @@
   },
   "build": {
     "appId": "dm_electron_demo_48100247@qq.com",
+    "electronDownload": {
+      "mirror": "https://npm.taobao.org/mirrors/electron/"
+    },
     "files": [
       "node_modules",
       "dist/main/**",
