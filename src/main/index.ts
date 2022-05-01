@@ -1,8 +1,6 @@
 import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join, resolve } from 'path'
 import is_dev from 'electron-is-dev'
-import { autoUpdater } from 'electron-updater'
-const log = require('electron-log')
 
 import dotenv from 'dotenv'
 import Store from 'electron-store'
@@ -13,8 +11,9 @@ import { useGlobalShortcut } from './modules/globalShortcut'
 import game from './modules/auto-game'
 import { getGameCount } from './modules/auto-game/utlis'
 
-new AutoUpdate()
-console.log(' this is todo branch version ', app.getVersion())
+if (is_dev) {
+  new AutoUpdate()
+}
 export const icoPath = is_dev ? join(__dirname, '../../src/render/public/1.ico') : join(__dirname, '../render/1.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
 ipcMain.on('onWindow', (e, state) => {
