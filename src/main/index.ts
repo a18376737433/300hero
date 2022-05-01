@@ -11,7 +11,7 @@ import { useGlobalShortcut } from './modules/globalShortcut'
 import game from './modules/auto-game'
 import { getGameCount } from './modules/auto-game/utlis'
 
-if (is_dev) {
+if (!is_dev) {
   new AutoUpdate()
 }
 
