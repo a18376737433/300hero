@@ -1,8 +1,8 @@
 import { Tray, Menu } from 'electron'
-import { resolve, join } from 'path'
+import { icoPath } from '../../index'
 let appIcon: any
 export const useTray = (win: any): void => {
-  appIcon = new Tray(join(__dirname, '../render/1.ico'))
+  appIcon = new Tray(icoPath)
   appIcon.on('click', () => {
     if (win.isVisible()) {
       win.hide()

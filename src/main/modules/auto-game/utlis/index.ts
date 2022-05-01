@@ -5,6 +5,7 @@ import { resolve, join } from 'path'
 import { Notification } from 'electron'
 import isDevelop from 'electron-is-dev'
 import Store from 'electron-store'
+import { icoPath } from '../../../index'
 type Xy = [number, number]
 const store = new Store()
 export const setGameCount = (count: number) => {
@@ -315,6 +316,6 @@ export const msg = (body, title = '提示') => {
   new Notification({
     title,
     body,
-    icon: join(__dirname, '../render/1.ico')
+    icon: icoPath
   }).show()
 }
