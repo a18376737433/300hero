@@ -14,7 +14,7 @@ import game from './modules/auto-game'
 import { getGameCount } from './modules/auto-game/utlis'
 
 new AutoUpdate()
-console.log('this is todo branch version ', app.getVersion())
+console.log(' this is todo branch version ', app.getVersion())
 export const icoPath = is_dev ? join(__dirname, '../../src/render/public/1.ico') : join(__dirname, '../render/1.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
 ipcMain.on('onWindow', (e, state) => {
