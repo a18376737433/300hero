@@ -14,7 +14,8 @@ import game from './modules/auto-game'
 import { getGameCount } from './modules/auto-game/utlis'
 
 new AutoUpdate()
-console.log('我是dev分支1.1 version ', app.getVersion())
+console.log('this is todo branch version ', app.getVersion())
+export const icoPath = is_dev ? join(__dirname, '../../src/render/public/1.ico') : join(__dirname, '../render/1.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
 ipcMain.on('onWindow', (e, state) => {
   switch (state) {
@@ -52,7 +53,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: is_dev ? 1280 : 900,
     height: 700,
-    icon: join(__dirname, '../render/1.ico'),
+    icon: icoPath,
     title: `${app.getName()} v${app.getVersion()}`,
     webPreferences: {
       nodeIntegration: true,
