@@ -1,33 +1,33 @@
 /**
  * 参考链接: https://vitejs.dev/config/
  */
-import { join } from "path";
-import { UserConfig } from "vite";
-import dotenv from "dotenv";
-import vue from "@vitejs/plugin-vue";
+import { join } from 'path'
+import { UserConfig } from 'vite'
+import dotenv from 'dotenv'
+import vue from '@vitejs/plugin-vue'
 
-dotenv.config({ path: join(__dirname, ".env") });
-const root = join(__dirname, "src/render");
+dotenv.config({ path: join(__dirname, '.env') })
+const root = join(__dirname, 'src/render')
 
 const config: UserConfig = {
   root,
   resolve: {
     alias: {
-      "/@": root,
-    },
+      '@': root
+    }
   },
-  base: "./",
+  base: './',
   build: {
-    outDir: join("../../dist/render"),
-    emptyOutDir: true,
+    outDir: join('../../dist/render'),
+    emptyOutDir: true
   },
   server: {
-    port: +process.env.PORT,
+    port: +process.env.PORT
   },
   plugins: [vue()],
   optimizeDeps: {
-    exclude: ["electron-is-dev", "electron-store"],
-  },
-};
+    exclude: ['electron-is-dev', 'electron-store']
+  }
+}
 
-export default config;
+export default config

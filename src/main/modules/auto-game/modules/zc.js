@@ -12,7 +12,7 @@ const transformState = (state) => {
   return stateMap[state]
 }
 export async function useZc(hwnd) {
-  const qsOption = this.config.qs
+  const qsOption = Object.assign(this.config.qs, this.currentAccoutn)
   const isZC = () => {
     return this.state == 'zc'
   }
@@ -60,7 +60,7 @@ export async function useZc(hwnd) {
     lt = hou.includes('雷霆') && lt_index
   console.log(`[${new Date().toLocaleString()}]`, `${name}的配置`, `${interval}秒检测一次`, `${isSpring ? '对泉水' : ''}`, `使用${skill}技能`, `使用${equip}装备`, `${jd ? '使用鸡刀' : ''}`, `${lt ? '使用雷霆' : ''}`)
   console.log('循坏条件', isGameing(), isZC())
-  while (isGameing() && isZC()) {
+  while (isZC()) {
     const xy = isRed() ? [727, 666] : [615, 412],
       color = isRed() ? 'RED' : 'BLUE'
 
@@ -84,14 +84,14 @@ export async function useZc(hwnd) {
     if (isGameEnd() && isZC()) {
       console.log('结束退出')
       dm.keyPress(KEY['enter'])
-      this.gameCount += 1
+      this.todayGameCount += 1
       return
     }
 
     if (qsOption.dieQuit && isDie() && isZC()) {
       console.log('死亡退出')
       await useEsc()
-      this.gameCount += 1
+      this.todayGameCount += 1
       return
     }
   }
