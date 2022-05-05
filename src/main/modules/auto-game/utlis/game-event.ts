@@ -1,4 +1,4 @@
-import { isInHall, isInLogin, isGameing, msg, libDir, getGameCount, setGameCount } from './index'
+import { isInHall, isInLogin, isGameing, msg, libDir, getGameCount, setGameCount, useEsc } from './index'
 import * as dm from '../../dm'
 import Store from 'electron-store'
 class GameEvent {
@@ -7,7 +7,8 @@ class GameEvent {
   _state
 
   hwnd
-  config
+  config = new Store().get('config') || ({} as any)
+  currentAccoutn = this.config.accountList[0]
   matchInfo = {}
   constructor() {}
   findGameWindow() {
@@ -20,14 +21,14 @@ class GameEvent {
     dm.dll.BindWindowEx(hwnd, 'gdi', 'normal', 'windows', 'dx.public.disable.window.position', 0)
     this.hwnd = hwnd
   }
-  get gameCount() {
-    return getGameCount()
+  get todayGameCount() {
+    return getGameCount(this.currentAccoutn.name)
   }
-  set gameCount(val) {
-    setGameCount(val)
+  set todayGameCount(val) {
+    setGameCount(val, this.currentAccoutn.name)
     global.win.webContents.send('match:update', {
       match: this.matchInfo,
-      count: this.gameCount
+      count: this.todayGameCount
     })
   }
   async start() {
@@ -43,7 +44,7 @@ class GameEvent {
     dm.setPath(libDir)
     global.win.webContents.send('match:update', {
       match: this.matchInfo,
-      count: this.gameCount
+      count: this.todayGameCount
     })
     //ToDo  大厅背景可能导致不正常
     this._timeId = setInterval(() => {
@@ -72,16 +73,22 @@ class GameEvent {
     this.state = null
   }
   async test() {
-    this.gameCount += 1
+    this.todayGameCount += 1
     // this.findGameWindow()
     // dm.setWindowState(this.hwnd, 1)
   }
   on(eventName: string, cb: any) {
     this._callbacks[eventName] = (this._callbacks[eventName] || []).concat(cb)
   }
+
   async emit(eventName: string, ...args: any[]) {
-    if (this.gameCount > this.config.qs.gameCount) {
-      this.stop()
+    let { gameCount, name } = this.currentAccoutn || this.config.accountList[0]
+
+    if (this.todayGameCount >= gameCount && this.state == 'dt') {
+      console.log(`${name}这个账号打完了`)
+      await useEsc()
+      //this.stop()
+      return
     }
     if (!this._callbacks[eventName]) return
     for (const cb of this._callbacks[eventName]) {
@@ -94,7 +101,7 @@ class GameEvent {
   set state(val) {
     if (this._state != val) {
       this._state = val
-      this.emit(val, this.hwnd)
+      val && this.emit(val, this.hwnd)
     }
   }
 }
