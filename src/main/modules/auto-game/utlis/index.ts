@@ -8,22 +8,27 @@ import Store from 'electron-store'
 import { icoPath } from '../../../index'
 type Xy = [number, number]
 const store = new Store()
-export const setGameCount = (count: number) => {
-  store.set('gameCount', {
-    count,
-    expire: new Date().setHours(0, 0, 0, 0)
-  })
+
+export const setGameCount = (count: number, account: string) => {
+  // store.set('gameCount', {
+  //   [account]: count,
+  //   expire: new Date().setHours(0, 0, 0, 0)
+  // })
+  store.set(
+    'gameCount',
+    Object.assign({}, store.get('gameCount'), {
+      [account]: count,
+      expire: new Date().setHours(0, 0, 0, 0)
+    })
+  )
 }
-export const getGameCount = () => {
+export const getGameCount = (account: string) => {
   let res: any = store.get('gameCount')
-  if (!res) {
-    return 0
-  }
   if (res.expire != new Date().setHours(0, 0, 0, 0)) {
-    setGameCount(0)
+    setGameCount(0, account)
     return 0
   }
-  return res.count
+  return res[account] || 0
 }
 /**
  *

@@ -14,7 +14,7 @@ const _entry = [
   // XY.xlc_dryx
 ]
 export async function useHall(hwnd) {
-  const { role: _role, isRandom } = this.config.qs
+  const { role: _role, randomRole } = Object.assign(this.config.qs, this.currentAccoutn)
 
   console.log('大厅界面')
   await sleep(2000)
@@ -34,7 +34,7 @@ export async function useHall(hwnd) {
     await sleep(delay)
   }
   //选择角色
-  if (isRandom) {
+  if (randomRole) {
     leftClick(...XY['cj'].xy)
     await sleep(500)
     dm.keyPress(KEY['enter'])

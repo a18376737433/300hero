@@ -37,7 +37,7 @@ ipcMain.on('store:set', async (e, { key, value }) => {
 })
 ipcMain.on('store:get', (e, name) => {
   if (name == 'gameCount') {
-    e.returnValue = getGameCount()
+    e.returnValue = getGameCount(game.currentAccoutn.name)
     return
   }
   e.returnValue = store.get(name)
@@ -67,7 +67,7 @@ function createWindow() {
   is_dev && win.webContents.openDevTools()
   useTray(win)
   useGlobalShortcut(win)
-  useMenu(win)
+  //useMenu(win)
   // win.on('minimize', () => {
   //   win.hide()
   // })
