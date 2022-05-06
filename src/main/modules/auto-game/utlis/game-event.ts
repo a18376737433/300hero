@@ -28,7 +28,8 @@ class GameEvent {
     setGameCount(val, this.currentAccoutn.name)
     global.win.webContents.send('match:update', {
       match: this.matchInfo,
-      count: this.todayGameCount
+      count: this.todayGameCount,
+      account: this.currentAccoutn
     })
   }
   async start() {
@@ -44,7 +45,8 @@ class GameEvent {
     dm.setPath(libDir)
     global.win.webContents.send('match:update', {
       match: this.matchInfo,
-      count: this.todayGameCount
+      count: this.todayGameCount,
+      account: this.currentAccoutn
     })
     //ToDo  大厅背景可能导致不正常
     this._timeId = setInterval(() => {

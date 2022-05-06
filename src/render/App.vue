@@ -12,16 +12,7 @@ const loaded = () => {
 let preConfig = ipcRenderer.sendSync('store:get', 'config')
 console.log(preConfig)
 const defaultConfig = {
-  accountList: [
-    {
-      name: 'a15078831738',
-      password: 'hzx150788',
-      gameCount: 50,
-      dieQuit: true,
-      randomRole: true,
-      todayGameCount: 50
-    }
-  ],
+  accountList: [],
   qs: {
     role: [{ equip: [1, 'f'], hou: ['鸡刀', '雷霆'], name: '康娜', skill: 'r' }],
     //随机英雄
@@ -70,13 +61,15 @@ ipcRenderer.on('shortcut_key', (e, { key }) => {
 
 const matchInfo = reactive({
   count: 0,
+  account: {},
   match: {}
 })
 
 matchInfo.count = ipcRenderer.sendSync('store:get', 'gameCount') || 0
-ipcRenderer.on('match:update', (e, { count, match }) => {
+ipcRenderer.on('match:update', (e, { count, match, account }) => {
   matchInfo.count = count
   matchInfo.match = match
+  matchInfo.account = account
 })
 const handleWindow = (state) => {
   if (state === 'start') {
@@ -95,7 +88,8 @@ const tabActiveName = ref('spring')
 <template>
   <div class="main">
     <h4 class="head">
-      <span>当前局数:{{ matchInfo.count }}</span>
+      <span v-if="matchInfo.count">当前局数:{{ matchInfo.count }}</span>
+      <span v-if="matchInfo.account?.name">账号:{{ matchInfo.account?.name }}</span>
       <span v-show="Object.keys(matchInfo.match).length">角色:{{ matchInfo.match?.role || '未知' }}</span>
       <span v-show="Object.keys(matchInfo.match).length">{{ matchInfo.match?.isRed ? '红' : '蓝' }}方</span>
     </h4>
