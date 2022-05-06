@@ -11,24 +11,28 @@ const store = new Store()
 
 export const setGameCount = (count: number, account: string) => {
   // store.set('gameCount', {
-  //   [account]: count,
-  //   expire: new Date().setHours(0, 0, 0, 0)
+  //   [account]: {
+  //     count,
+  //     expire: new Date().setHours(0, 0, 0, 0)
+  //   }
   // })
   store.set(
     'gameCount',
     Object.assign({}, store.get('gameCount'), {
-      [account]: count,
-      expire: new Date().setHours(0, 0, 0, 0)
+      [account]: {
+        count,
+        expire: new Date().setHours(0, 0, 0, 0)
+      }
     })
   )
 }
 export const getGameCount = (account: string) => {
   let res: any = store.get('gameCount')
-  if (res.expire != new Date().setHours(0, 0, 0, 0)) {
+  if (res[account].expire != new Date().setHours(0, 0, 0, 0)) {
     setGameCount(0, account)
     return 0
   }
-  return res[account] || 0
+  return res[account].count || 0
 }
 /**
  *
