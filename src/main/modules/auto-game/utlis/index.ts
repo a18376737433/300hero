@@ -28,11 +28,11 @@ export const setGameCount = (count: number, account: string) => {
 }
 export const getGameCount = (account: string) => {
   let res: any = store.get('gameCount')
-  if (res[account].expire != new Date().setHours(0, 0, 0, 0)) {
+  if (res[account]?.expire != new Date().setHours(0, 0, 0, 0)) {
     setGameCount(0, account)
     return 0
   }
-  return res[account].count || 0
+  return res[account]?.count || 0
 }
 /**
  *
