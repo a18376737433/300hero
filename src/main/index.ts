@@ -50,7 +50,7 @@ ipcMain.on('store:delete', async (e, args) => {
 let win
 function createWindow() {
   win = new BrowserWindow({
-    width: is_dev ? 1440 : 900,
+    width: is_dev ? 1440 : 1280,
     height: 900,
     icon: icoPath,
     title: `${app.getName()} v${app.getVersion()}`,
