@@ -12,7 +12,7 @@ const transformState = (state) => {
   return stateMap[state]
 }
 export async function useZc(hwnd) {
-  const qsOption = Object.assign(this.config.qs, this.currentAccoutn)
+  const qsOption = Object.assign(this?.config?.qs, this.currentAccoutn)
   const isZC = () => {
     return this.state == 'zc'
   }
