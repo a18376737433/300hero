@@ -13,8 +13,10 @@ let preConfig = ipcRenderer.sendSync('store:get', 'config')
 console.log(preConfig)
 const defaultConfig = {
   accountList: [],
+  mode: 'zc',
   qs: {
     role: [{ equip: [1, 'f'], hou: ['鸡刀', '雷霆'], name: '康娜', skill: 'r' }],
+
     //随机英雄
     isRandom: false,
     //游戏局数
@@ -93,6 +95,10 @@ const tabActiveName = ref('spring')
       <span v-show="Object.keys(matchInfo.match).length">角色:{{ matchInfo.match?.role || '未知' }}</span>
       <span v-show="Object.keys(matchInfo.match).length">{{ matchInfo.match?.isRed ? '红' : '蓝' }}方</span>
     </h4>
+    <el-radio-group v-model="config.mode" size="large">
+      <el-radio-button label="zc">战场</el-radio-button>
+      <el-radio-button label="dds">惇惇兽</el-radio-button>
+    </el-radio-group>
     <el-tabs tab-position="left" v-model="tabActiveName">
       <el-tab-pane name="spring">
         <template #label>

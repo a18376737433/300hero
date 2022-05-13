@@ -1,4 +1,4 @@
-import { isInHall, isInLogin, isGameing, msg, libDir, getGameCount, setGameCount, useEsc } from './index'
+import { isInHall, isInLogin, isGameing, msg, libDir, getGameCount, setGameCount, useEsc, sleep } from './index'
 import * as dm from '../../dm'
 import Store from 'electron-store'
 class GameEvent {
@@ -75,9 +75,12 @@ class GameEvent {
     this.state = null
   }
   async test() {
-    this.todayGameCount += 1
     // this.findGameWindow()
     // dm.setWindowState(this.hwnd, 1)
+    //this.todayGameCount += 1
+    // this.findGameWindow()
+    // dm.setWindowState(this.hwnd, 1)
+    console.log(this.config)
   }
   on(eventName: string, cb: any) {
     this._callbacks[eventName] = (this._callbacks[eventName] || []).concat(cb)

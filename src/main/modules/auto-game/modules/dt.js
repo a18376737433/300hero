@@ -2,7 +2,6 @@ import * as dm from '../../dm'
 import XY from '../utlis/xy'
 import KEY from '../utlis/key'
 import { isBan, sleep, leftClick, checkedRole, isCheckedRole, isInHall } from '../utlis'
-import Store from 'electron-store'
 
 const _entry = [
   XY.play,
@@ -15,7 +14,7 @@ const _entry = [
 ]
 export async function useHall(hwnd) {
   const { role: _role, randomRole } = Object.assign(this.config.qs, this.currentAccoutn)
-
+  const { mode = 'zc' } = this.config
   console.log('大厅界面')
   await sleep(2000)
   //关闭更新公告
@@ -28,12 +27,24 @@ export async function useHall(hwnd) {
     await sleep(60 * 1000)
   }
   //进入选人界面
-  for (const { xy, desc, delay = 100 } of _entry) {
-    leftClick(...xy)
-    //console.log(desc)
-    await sleep(delay)
+  if (mode == 'zc') {
+    dm.moveTo(645, 39)
+    await sleep(1500)
+    dm.moveTo(707, 77)
+    dm.leftClick()
   }
+  if (mode == 'dds') {
+    leftClick(...XY['play'].xy)
+    leftClick(184, 498)
+    leftClick(645, 674)
+  }
+  // for (const { xy, desc, delay = 100 } of _entry) {
+  //   leftClick(...xy)
+  //   //console.log(desc)
+  //   await sleep(delay)
+  // }
   //选择角色
+  await sleep(5000)
   if (randomRole) {
     leftClick(...XY['cj'].xy)
     await sleep(500)
