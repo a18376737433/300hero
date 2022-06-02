@@ -8,7 +8,7 @@ class GameEvent {
 
   hwnd
   config = new Store().get('config') || ({} as any)
-  currentAccoutn = this.config.accountList[0]
+  currentAccoutn = this.config?.accountList[0] || {}
   matchInfo = {}
   constructor() {}
   findGameWindow() {
@@ -22,10 +22,10 @@ class GameEvent {
     this.hwnd = hwnd
   }
   get todayGameCount() {
-    return getGameCount(this.currentAccoutn.name)
+    return getGameCount(this.currentAccoutn?.name)
   }
   set todayGameCount(val) {
-    setGameCount(val, this.currentAccoutn.name)
+    setGameCount(val, this.currentAccoutn?.name)
     global.win.webContents.send('match:update', {
       match: this.matchInfo,
       count: this.todayGameCount,
@@ -87,7 +87,7 @@ class GameEvent {
   }
 
   async emit(eventName: string, ...args: any[]) {
-    let { gameCount, name } = this.currentAccoutn || this.config.accountList[0]
+    let { gameCount, name } = this.currentAccoutn || this.config?.accountList[0]
 
     if (this.todayGameCount >= gameCount && this.state == 'dt') {
       console.log(`${name}这个账号打完了`)
