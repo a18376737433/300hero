@@ -8,7 +8,7 @@ class GameEvent {
 
   hwnd
   config = new Store().get('config') || ({} as any)
-  currentAccoutn = this.config?.accountList[0] || {}
+  currentAccoutn = this.config.accountList?.[0] || {}
   matchInfo = {}
   constructor() {}
   findGameWindow() {
