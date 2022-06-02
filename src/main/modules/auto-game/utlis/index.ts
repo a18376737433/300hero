@@ -39,7 +39,7 @@ export const getGameCount = (account: string) => {
  * @param {number} time 延时时间 毫秒
  * @returns
  */
-export var libDir = join(__dirname, isDevelop ? '../../src/main/library' : '../../../library')
+export const libDir = join(__dirname, isDevelop ? '../../src/main/library' : '../../../library')
 export const random = (min: number, max: number) => {
   return Math.round(Math.random() * (max - min) + min)
 }
