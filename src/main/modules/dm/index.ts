@@ -1,6 +1,8 @@
 import { execFileSync, execSync } from 'child_process'
-import { resolve } from 'path'
-import { libDir } from '../auto-game/utlis'
+import { resolve, join } from 'path'
+import isDevelop from 'electron-is-dev'
+const libDir = join(__dirname, isDevelop ? '../../src/main/library' : '../../../library')
+
 const winax = require('winax')
 import { Coordinate, DmRet, ErrorDisplay, FindDir, FindRet, GetWindowFlag, KeyState, OcrRet, Size, WindowState } from './types'
 type DisplayType = 'normal' | 'gdi' | 'gdi2' | 'dx' | 'dx2' | 'dx3'
