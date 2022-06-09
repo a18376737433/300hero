@@ -29,7 +29,8 @@ export async function useHall(hwnd) {
   //进入选人界面
   if (mode == 'zc') {
     dm.moveTo(645, 39)
-    await sleep(1500)
+    await sleep(2000)
+    dm.moveTo(646, 40)
     dm.moveTo(707, 77)
     dm.leftClick()
   }
