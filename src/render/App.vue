@@ -58,6 +58,7 @@ const tabActiveName = ref('spring')
 </script>
 
 <template>
+  <div class="color-red">111</div>
   <div class="main">
     <h4 class="head">
       <span v-if="matchInfo.count">当前局数:{{ matchInfo.count }}</span>

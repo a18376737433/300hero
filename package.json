@@ -59,7 +59,7 @@
     "electron-store": "^6.0.0",
     "electron-updater": "^5.0.1",
     "element-plus": "^2.1.11",
-    "vue": "^3.2.33",
+    "vue": "^3.2.37",
     "vuedraggable": "^4.1.0",
     "winax": "^3.3.2"
   },
@@ -68,8 +68,11 @@
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "@unocss/preset-attributify": "^0.44.7",
+    "@unocss/preset-icons": "^0.44.7",
+    "@unocss/preset-uno": "^0.44.7",
     "@vitejs/plugin-vue": "^1.0.4",
-    "@vue/compiler-sfc": "^3.0.5",
+    "@vue/compiler-sfc": "^3.2.37",
     "chalk": "^4.1.0",
     "concurrently": "^5.3.0",
     "dotenv": "^8.2.0",
@@ -82,7 +85,8 @@
     "rollup-plugin-esbuild": "^2.4.2",
     "sass": "^1.26.10",
     "typescript": "^3.9.7",
-    "vite": "latest",
+    "unocss": "^0.44.7",
+    "vite": "^2.7.0",
     "wait-on": "^5.2.1"
   },
   "keywords": [
