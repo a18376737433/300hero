@@ -13,7 +13,8 @@ const config: UserConfig = {
   root,
   resolve: {
     alias: {
-      '@': root
+      '@': root,
+      '@@': __dirname
     }
   },
   base: './',
@@ -22,7 +23,7 @@ const config: UserConfig = {
     emptyOutDir: true
   },
   server: {
-    port: +process.env.PORT
+    port: +process.env.PORT!
   },
   plugins: [vue()],
   optimizeDeps: {
