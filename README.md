@@ -11,7 +11,7 @@ node 12.18.3-x86  我使用的是14.17.0 32位
 ## Install
 
 务必使用yarn安装、或者根据yarn.lock版本安装依赖
-
+- npm config set electron_mirror https://npm.taobao.org/mirrors/electron/
 - yarn config set registry https://registry.npm.taobao.org
 
 - yarn
