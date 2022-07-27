@@ -5,7 +5,7 @@ import account from './views/account.vue'
 import spring from './views/spring.vue'
 import default_config from '@@/config'
 const loaded = () => {
-  const appLoading = document.getElementById('appLoading')
+  const appLoading = document.getElementById('apploading')
   if (appLoading) appLoading.style.display = 'none'
 }
 let preConfig = ipcRenderer.sendSync('store:get', 'config')
@@ -13,7 +13,7 @@ console.log('默认配置', default_config)
 console.log('用户配置', preConfig)
 
 const config = reactive(preConfig || default_config)
-loaded()
+//loaded()
 
 //监听main的快捷键事件
 ipcRenderer.on('shortcut_key', (e, { key }) => {
@@ -57,9 +57,8 @@ const tabActiveName = ref('spring')
 </script>
 
 <template>
-  <div class="main">
-    <div class="text-red-50 hover:text-cyan-800">1111</div>
-    <h4 class="head">
+  <div class="main px-1 py-2 overflow-auto h-full">
+    <h4 class="py-2">
       <span v-if="matchInfo.count">当前局数:{{ matchInfo.count }}</span>
       <span v-if="matchInfo.account?.name">账号:{{ matchInfo.account?.name }}</span>
       <span v-show="Object.keys(matchInfo.match).length">角色:{{ matchInfo.match?.role || '未知' }}</span>
@@ -90,7 +89,7 @@ const tabActiveName = ref('spring')
       </el-tab-pane>
     </el-tabs>
 
-    <div class="foot">
+    <div class="fixed p-2 bottom-0 flex justify-end w-screen 2">
       <el-button type="primary" @click="handleWindow('start')">开始(F1)</el-button>
       <el-button type="danger" @click="handleWindow('stop')">停止(F2)</el-button>
       <el-button type="success" @click="handleWindow('test')">Test</el-button>
@@ -99,33 +98,10 @@ const tabActiveName = ref('spring')
 </template>
 
 <style lang="scss" scoped>
-.main {
-  padding: 5px 10px;
-  overflow: scroll;
-  height: 100vh;
-  :deep(.el-form-item) {
-    margin-bottom: 5px;
+.icon-box {
+  @apply flex items-center;
+  .el-icon {
+    @apply mr-1;
   }
-  .icon-box {
-    display: flex;
-    align-items: center;
-    .el-icon {
-      margin-right: 5px;
-    }
-  }
-}
-.head {
-  padding: 10px 0;
-  span {
-    margin-right: 10px;
-  }
-}
-.foot {
-  position: fixed;
-  padding: 10px 0;
-  bottom: 0;
-  width: 90%;
-  display: flex;
-  justify-content: flex-end;
 }
 </style>
