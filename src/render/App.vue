@@ -58,7 +58,6 @@ const tabActiveName = ref('spring')
 </script>
 
 <template>
-  <div class="color-red">111</div>
   <div class="main">
     <div class="text-red-50 hover:text-cyan-800">1111</div>
     <h4 class="head">

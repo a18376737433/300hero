@@ -10,14 +10,16 @@
     "url": "https://github.com/a18376737433/300hero.git"
   },
   "scripts": {
-    "dev": "npm run dev:all",
-    "dev:all": "set NODE_ENV=development && concurrently -n=vue,ele -c=green,blue \"npm run dev:vue\" \"npm run dev:ele\"",
+    "dev": "pnpm dev:all",
+    "dev:all": "set NODE_ENV=development && concurrently -n=vue,ele -c=green,blue \"pnpm dev:vue\" \"pnpm dev:ele\"",
     "dev:vue": "vite",
     "dev:ele": "node script/build --env=development --watch",
     "build:vue": "vite build",
     "build:ele": "node script/build --env=production",
-    "build": "npm run build:vue && npm run build:ele && electron-builder",
-    "rebuild": "./node_modules/.bin/electron-rebuild"
+    "build": "pnpm build:vue && pnpm build:ele && electron-builder",
+    "re": "pnpm node_modules/.bin/electron-rebuild",
+    "clean": "rimraf dist",
+    "clean:nm": "rimraf node_modules"
   },
   "build": {
     "appId": "dm_electron_demo_48100247@qq.com",
@@ -82,6 +84,8 @@
     "minimist": "^1.2.5",
     "ora": "^5.0.0",
     "postcss": "^8.4.14",
+    "rimraf": "^3.0.2",
+    "rollup": "2.34.2",
     "rollup-plugin-esbuild": "^2.4.2",
     "sass": "^1.26.10",
     "tailwindcss": "^3.1.6",
