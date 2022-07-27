@@ -1,7 +1,6 @@
 <script setup>
 const { ipcRenderer } = require('electron')
 import { ElMessage } from 'element-plus'
-import { onMounted, reactive, toRaw, computed, ref, watch } from 'vue'
 import account from './views/account.vue'
 import spring from './views/spring.vue'
 import default_config from '@@/config'

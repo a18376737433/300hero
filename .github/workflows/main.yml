@@ -1,8 +1,7 @@
 name: CI
 on:
   pull_request:
-    types:
-      closed
+    types: closed
     branches:
       - master
   workflow_dispatch:
@@ -14,15 +13,15 @@ jobs:
       - name: 安装Node.js
         uses: actions/setup-node@v2-beta
       - name: 安装yarn
-        run: npm i -g yarn
+        run: npm i -g pnpm
       - name: 安装依赖 # 使用yarn 安装依赖
-        run: yarn
+        run: pnpm i
       - name: rebuild
-        run: yarn rebuild
+        run: pnpm re
       - name: build vue and ele
         env:
           GITHUB_TOKEN: ${{secrets.BUILD_TOKEN}}
-        run: yarn build
+        run: pnpm build
       - name: cleanup artifacts
         run: npx rimraf "dist/win-ia32-unpacked"&&npx rimraf "dist/win-ia32-unpacked"&&npx rimraf "dist/render"&& npx rimraf "dist/main"&&npx rimraf "dist/builder-debug.yml"&&npx rimraf "dist/builder-effective-config.yaml"
       - name: upload dist

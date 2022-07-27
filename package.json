@@ -70,7 +70,7 @@
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
-    "@vitejs/plugin-vue": "^1.0.4",
+    "@vitejs/plugin-vue": "2",
     "@vue/compiler-sfc": "^3.0.5",
     "autoprefixer": "^10.4.7",
     "chalk": "^4.1.0",
@@ -90,6 +90,8 @@
     "sass": "^1.26.10",
     "tailwindcss": "^3.1.6",
     "typescript": "^3.9.7",
+    "unplugin-auto-import": "^0.10.1",
+    "unplugin-vue-components": "^0.21.2",
     "vite": "2",
     "wait-on": "^5.2.1"
   },

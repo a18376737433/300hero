@@ -1,6 +1,4 @@
 <script setup>
-import { reactive, ref } from 'vue'
-
 import draggable from 'vuedraggable'
 const props = defineProps({
   accountList: {

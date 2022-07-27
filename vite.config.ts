@@ -4,7 +4,7 @@
 import { join } from 'path'
 import { UserConfig } from 'vite'
 import dotenv from 'dotenv'
-import vue from '@vitejs/plugin-vue'
+import vitePreset from './vitePreset.config'
 dotenv.config({ path: join(__dirname, '.env') })
 const root = join(__dirname, 'src/render')
 
@@ -24,9 +24,7 @@ const config: UserConfig = {
   server: {
     port: +process.env.PORT!
   },
-  plugins: [
-    vue()
-  ],
+  plugins: [vitePreset()],
   optimizeDeps: {
     exclude: ['electron-is-dev', 'electron-store']
   }
