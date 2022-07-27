@@ -59,6 +59,7 @@ const tabActiveName = ref('spring')
 
 <template>
   <div class="main">
+    <div class="text-red-50 hover:text-cyan-800">1111</div>
     <h4 class="head">
       <span v-if="matchInfo.count">当前局数:{{ matchInfo.count }}</span>
       <span v-if="matchInfo.account?.name">账号:{{ matchInfo.account?.name }}</span>
