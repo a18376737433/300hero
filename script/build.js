@@ -17,9 +17,6 @@ const opt = options(argv.env)
 const TAG = '[script/build.js]'
 const spinner = ora(`${TAG} Electron build...`)
 
-console.log(chalk.green('清除历史打包文件...'))
-execSync('pnpm run clean', { stdio: 'inherit' })
-
 const watch_cb = function () {
   // once here, all resources are available
   const watcher = rollup.watch(opt)

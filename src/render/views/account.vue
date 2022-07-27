@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, defineProps } from 'vue'
+import { reactive, ref } from 'vue'
 
 import draggable from 'vuedraggable'
 const props = defineProps({

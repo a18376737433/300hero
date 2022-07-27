@@ -10,13 +10,13 @@
     "url": "https://github.com/a18376737433/300hero.git"
   },
   "scripts": {
-    "dev": "pnpm dev:all",
+    "dev": "pnpm clean && pnpm dev:all",
     "dev:all": "set NODE_ENV=development && concurrently -n=vue,ele -c=green,blue \"pnpm dev:vue\" \"pnpm dev:ele\"",
     "dev:vue": "vite",
     "dev:ele": "node script/build --env=development --watch",
     "build:vue": "vite build",
     "build:ele": "node script/build --env=production",
-    "build": "pnpm build:vue && pnpm build:ele && electron-builder",
+    "build": "pnpm clean && pnpm build:vue && pnpm build:ele && electron-builder",
     "re": "pnpm node_modules/.bin/electron-rebuild",
     "clean": "rimraf dist",
     "clean:nm": "rimraf node_modules"
@@ -86,11 +86,11 @@
     "postcss": "^8.4.14",
     "rimraf": "^3.0.2",
     "rollup": "2.34.2",
-    "rollup-plugin-esbuild": "^2.4.2",
+    "rollup-plugin-esbuild": "^4.9.1",
     "sass": "^1.26.10",
     "tailwindcss": "^3.1.6",
     "typescript": "^3.9.7",
-    "vite": "2.3",
+    "vite": "2",
     "wait-on": "^5.2.1"
   },
   "keywords": [
