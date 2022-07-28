@@ -56,6 +56,7 @@ function createWindow() {
     title: `${app.getName()} v${app.getVersion()}`,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       enableRemoteModule: true,
       preload: is_dev ? resolve(__dirname, '../../src/render/public/preload.js') : resolve(__dirname, '../render/preload.js')
     }

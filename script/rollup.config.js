@@ -12,7 +12,7 @@ module.exports = (env = 'production') => {
       file: path.join(__dirname, '../dist/main/index.js'),
       format: 'cjs',
       name: 'ElectronMainBundle',
-      sourcemap: true
+      sourcemap: false
     },
     plugins: [
       nodeResolve({ jsnext: true, preferBuiltins: true, browser: true }), // 消除碰到 node.js 模块时⚠警告
@@ -46,7 +46,6 @@ module.exports = (env = 'production') => {
           {
             find: '@',
             replacement: () => {
-              console.log('?????')
               return path.resolve(__dirname, '../src')
             }
             // path.join(__dirname, "../src/main")

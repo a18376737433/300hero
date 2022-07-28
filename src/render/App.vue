@@ -1,6 +1,4 @@
 <script setup>
-//const { ipcRenderer } = require('electron')
-
 import { ElMessage } from 'element-plus'
 import account from './views/account.vue'
 import spring from './views/spring.vue'
@@ -9,7 +7,8 @@ const loaded = () => {
   const appLoading = document.getElementById('apploading')
   if (appLoading) appLoading.style.display = 'none'
 }
-console.log('window.ipcRenderer :>> ', window.ipcRenderer);
+
+console.log('window.ipcRenderer :>> ', window.ipcRenderer)
 let preConfig = window.ipcRenderer.sendSync('store:get', 'config')
 console.log('默认配置', default_config)
 console.log('用户配置', preConfig)

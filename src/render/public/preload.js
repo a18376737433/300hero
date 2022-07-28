@@ -1,5 +1,1 @@
-import { contextBridge, ipcRenderer } from 'electron'
-
-contextBridge.exposeInMainWorld('electron', {
-  ipcRenderer
-})
+window.ipcRenderer = require('electron').ipcRenderer
