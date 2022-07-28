@@ -6,6 +6,7 @@ const alias = require('@rollup/plugin-alias')
 const json = require('@rollup/plugin-json')
 
 module.exports = (env = 'production') => {
+  console.log(env === 'production' ? '生产环境打包' : '开发环境打包')
   return {
     input: path.join(__dirname, '../src/main/index.ts'),
     output: {
@@ -24,7 +25,7 @@ module.exports = (env = 'production') => {
         exclude: /node_modules/, // default
         // watch: process.argv.includes('--watch'), // rollup 中有配置
         sourceMap: false, // default
-        minify: process.env.NODE_ENV === 'production',
+        minify: env === 'production',
         target: 'es2017', // default, or 'es20XX', 'esnext'
         jsxFactory: 'React.createElement',
         jsxFragment: 'React.Fragment',
