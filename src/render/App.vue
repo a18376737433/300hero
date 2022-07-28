@@ -1,5 +1,6 @@
 <script setup>
-const { ipcRenderer } = require('electron')
+//const { ipcRenderer } = require('electron')
+
 import { ElMessage } from 'element-plus'
 import account from './views/account.vue'
 import spring from './views/spring.vue'
@@ -8,15 +9,16 @@ const loaded = () => {
   const appLoading = document.getElementById('apploading')
   if (appLoading) appLoading.style.display = 'none'
 }
-let preConfig = ipcRenderer.sendSync('store:get', 'config')
+console.log('window.ipcRenderer :>> ', window.ipcRenderer);
+let preConfig = window.ipcRenderer.sendSync('store:get', 'config')
 console.log('默认配置', default_config)
 console.log('用户配置', preConfig)
 
 const config = reactive(preConfig || default_config)
-//loaded()
+loaded()
 
 //监听main的快捷键事件
-ipcRenderer.on('shortcut_key', (e, { key }) => {
+window.ipcRenderer.on('shortcut_key', (e, { key }) => {
   switch (key) {
     case 'f1':
       handleWindow('start')
@@ -36,8 +38,8 @@ const matchInfo = reactive({
   match: {}
 })
 
-matchInfo.count = ipcRenderer.sendSync('store:get', 'gameCount') || 0
-ipcRenderer.on('match:update', (e, { count, match, account }) => {
+matchInfo.count = window.ipcRenderer.sendSync('store:get', 'gameCount') || 0
+window.ipcRenderer.on('match:update', (e, { count, match, account }) => {
   matchInfo.count = count
   matchInfo.match = match
   matchInfo.account = account
@@ -45,12 +47,12 @@ ipcRenderer.on('match:update', (e, { count, match, account }) => {
 const handleWindow = (state) => {
   if (state === 'start') {
     console.log(config)
-    ipcRenderer.send('store:set', {
+    window.ipcRenderer.send('store:set', {
       key: 'config',
       value: JSON.parse(JSON.stringify(config))
     })
   }
-  ipcRenderer.send('onWindow', state)
+  window.ipcRenderer.send('onWindow', state)
 }
 
 const tabActiveName = ref('spring')

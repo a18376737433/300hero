@@ -10,7 +10,7 @@ import AutoUpdate from './modules/autoUpdate'
 import { useGlobalShortcut } from './modules/globalShortcut'
 import game from './modules/auto-game'
 import { getGameCount } from './modules/auto-game/utlis'
-
+console.log(is_dev ? '开发模式' : '生产模式', __dirname)
 if (!is_dev) {
   new AutoUpdate()
 }
@@ -56,7 +56,8 @@ function createWindow() {
     title: `${app.getName()} v${app.getVersion()}`,
     webPreferences: {
       nodeIntegration: true,
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      preload: is_dev ? resolve(__dirname, '../../src/render/public/preload.js') : resolve(__dirname, '../render/preload.js')
     }
   })
   const URL = is_dev
