@@ -14,7 +14,10 @@ console.log(is_dev ? '开发模式' : '生产模式', __dirname)
 if (!is_dev) {
   new AutoUpdate()
 }
-export const icoPath = is_dev ? join(__dirname, '../../src/render/public/1.ico') : join(__dirname, '../render/1.ico')
+const getPublicFile = (is_dev: boolean, file: string): string => {
+  return is_dev ? resolve(__dirname, `../../src/render/public/${file}`) : resolve(__dirname, `../render/public/${file}`)
+}
+export const icoPath = getPublicFile(is_dev, '1.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
 ipcMain.on('onWindow', (e, state) => {
   switch (state) {
@@ -57,8 +60,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true,
-      preload: is_dev ? resolve(__dirname, '../../src/render/public/preload.js') : resolve(__dirname, '../render/preload.js')
+      preload: getPublicFile(is_dev, 'preload.js')
     }
   })
   const URL = is_dev
