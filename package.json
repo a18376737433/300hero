@@ -92,7 +92,7 @@
     "typescript": "^3.9.7",
     "unplugin-auto-import": "^0.10.1",
     "unplugin-vue-components": "^0.21.2",
-    "vite": "2",
+    "vite": "^3.0.3",
     "wait-on": "^5.2.1"
   },
   "keywords": [
