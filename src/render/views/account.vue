@@ -23,11 +23,16 @@ const removeAccountItem = (index) => {
 </script>
 
 <template>
-  <draggable :list="accountList" item-key="name" class="list-group" ghost-class="ghost" @start="dragging = true" @end="dragging = false">
+  <div class="border relative m-4">
+    <input class="peer w-full" type="text" />
+    <label class="absolute left-4 transition-all peer-focus:-translate-y-3 peer-focus:scale-75 pointer-events-none">账号</label>
+  </div>
+  <draggable :list="accountList" item-key="index" ghost-class="ghost" @start="dragging = true" @end="dragging = false">
     <template #item="{ element, index }">
-      <div class="draggable-item flex">
+      <div class="draggable-item">
         <el-input style="width: 150px" placeholder="账号" class="no-border" v-model.trim="element.name" />
         <el-input style="width: 150px" placeholder="密码" class="no-border" v-model.trim="element.password" />
+
         <div class="flex">
           <div>打</div>
           <el-input style="width: 55px" class="no-border" v-model.number="element.gameCount" />
@@ -48,19 +53,8 @@ const removeAccountItem = (index) => {
     </template>
   </draggable>
   <div class="draggable-pust" @click="pushAccountItem">
-    <el-icon color="#409eff"><circle-plus /></el-icon>
+    <el-icon color="#409eff"><circle-plus :size="25" /></el-icon>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.handle {
-  height: 100%;
-  padding: 8px;
-  font-size: 20px;
-  cursor: move;
-}
-.highlight {
-  opacity: 0.5;
-  background-color: red;
-}
-</style>
+<style lang="scss" scoped></style>

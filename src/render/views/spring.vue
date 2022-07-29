@@ -73,9 +73,9 @@ const HPorMPSelectOption = [
 </script>
 
 <template>
-  <draggable :list="qs.role" item-key="name" class="list-group" ghost-class="ghost" @start="dragging = true" @end="dragging = false">
+  <draggable :list="qs.role" item-key="index" class="list-group" ghost-class="ghost" @start="dragging = true" @end="dragging = false">
     <template #item="{ element, index }">
-      <div class="draggable-item flex">
+      <div class="draggable-item ">
         <el-input style="width: 80px" class="no-border" v-model="element.name" />
         <div>对泉水</div>
         <el-switch v-model="element.isSpring" />

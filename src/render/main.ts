@@ -1,9 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import './style.css'
+import 'tailwindcss/tailwind.css'
 import './index.scss'
-
-import 'element-plus/dist/index.css'
 import * as ElIconModules from '@element-plus/icons-vue'
 
 const app = createApp(App as any)

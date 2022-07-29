@@ -31,23 +31,11 @@
 
 //
 .draggable-item {
-  position: relative;
-  border: 1px solid #dcdfe6;
-  border-radius: 20px;
-  margin: 5px 0;
-  padding: 0 10px;
-  cursor: move;
+  @apply flex relative border-sky-100 border rounded-2xl my-1 px-2 cursor-move;
   .el-icon {
-    position: absolute;
-    right: 5px;
-    cursor: pointer;
+    @apply absolute right-1 cursor-pointer;
   }
 }
 .draggable-pust {
-  font-size: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  border-bottom: 1px solid #dcdfe6;
+  @apply text-3xl flex justify-center items-center cursor-pointer border-b border-sky-100;
 }

@@ -1,8 +1,8 @@
 <script setup>
-import { ElMessage } from 'element-plus'
 import account from './views/account.vue'
 import spring from './views/spring.vue'
 import default_config from '@@/config'
+
 const loaded = () => {
   const appLoading = document.getElementById('apploading')
   if (appLoading) appLoading.style.display = 'none'

@@ -70,7 +70,7 @@ function createWindow() {
   is_dev && win.webContents.openDevTools()
   useTray(win)
   useGlobalShortcut(win)
-  useMenu(win)
+  !is_dev&&useMenu(win)
   // win.on('minimize', () => {
   //   win.hide()
   // })
