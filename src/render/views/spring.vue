@@ -73,22 +73,22 @@ const HPorMPSelectOption = [
 </script>
 
 <template>
-  <draggable :list="qs.role" item-key="index" class="list-group" ghost-class="ghost" @start="dragging = true" @end="dragging = false">
+  <draggable :list="qs.role" item-key="index" class="space-y-2" ghost-class="ghost" @start="dragging = true" @end="dragging = false">
     <template #item="{ element, index }">
-      <div class="draggable-item ">
-        <el-input style="width: 80px" class="no-border" v-model="element.name" />
+      <div class="draggable-item">
+        <el-input style="width: 80px" v-model="element.name" />
         <div>对泉水</div>
         <el-switch v-model="element.isSpring" />
         <div>使用技能</div>
-        <el-select placeholder="技能" style="width: 80px" class="no-border" v-model="element.skill">
+        <el-select placeholder="技能" style="width: 80px"  v-model="element.skill">
           <el-option v-for="item in ['q', 'w', 'e', 'r']" :key="item" :label="item" :value="item" />
         </el-select>
         <div>猴</div>
-        <el-select placeholder="装备" class="no-border" multiple v-model="element.hou">
+        <el-select placeholder="装备"  multiple v-model="element.hou">
           <el-option v-for="item in ['鸡刀', '雷霆']" :key="item" :label="item" :value="item" />
         </el-select>
         <div>使用装备</div>
-        <el-select placeholder="装备" class="no-border" multiple v-model="element.equip">
+        <el-select placeholder="装备"  multiple v-model="element.equip">
           <el-option v-for="item in equipSelectOption" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
         <el-icon @click="removeAccountItem(index)" :size="25" color="#ff4757"><remove /></el-icon>
@@ -99,45 +99,47 @@ const HPorMPSelectOption = [
     <el-icon color="#409eff"><circle-plus /></el-icon>
   </div>
   <div style="margin-top: 20px" class="flex">
-    <div class="flex">神器在<span style="color: #5352ed">装备栏</span>的位置 <el-input style="width: 55px" class="no-border" v-model="qs.zb_index" /></div>
-    <div class="flex">雷霆在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" class="no-border" v-model="qs.lt_index" /></div>
-    <div class="flex">鸡刀在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" class="no-border" v-model="qs.jd_index" /></div>
-    <div class="flex">神器在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" class="no-border" v-model="qs.sq_index" /></div>
+    <div class="flex">神器在<span style="color: #5352ed">装备栏</span>的位置 <el-input style="width: 55px"  v-model="qs.zb_index" /></div>
+    <div class="flex">雷霆在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px"  v-model="qs.lt_index" /></div>
+    <div class="flex">鸡刀在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px"  v-model="qs.jd_index" /></div>
+    <div class="flex">神器在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px"  v-model="qs.sq_index" /></div>
   </div>
   <div class="flex">
     <el-checkbox v-model="qs.stateDefend" name="type" />
 
     <div class="flex">
-      <el-select style="width: 80px" class="no-border" v-model="qs.hpOrMP" size="large">
+      <el-select style="width: 80px"  v-model="qs.hpOrMP" size="large">
         <el-option v-for="item in HPorMPSelectOption" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <div>低于</div>
-      <el-input style="width: 55px" class="no-border" v-model="qs.lower" />
+      <el-input style="width: 55px"  v-model="qs.lower" />
       <div>% 使用</div>
-      <el-select class="no-border" multiple v-model="qs.equip">
+      <el-select  multiple v-model="qs.equip">
         <el-option v-for="item in equipSelectOption" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </div>
     <div class="flex">
       <div>检测间隔</div>
-      <el-input style="width: 55px" class="no-border" v-model="qs.interval" />
+      <el-input style="width: 55px"  v-model="qs.interval" />
       <div>秒</div>
     </div>
   </div>
   <div class="flex">
     <div class="flex">
       <div>插眼</div>
-      <el-select style="width: 100px" class="no-border" v-model="qs.insertEye" size="large">
+      <el-select style="width: 100px"  v-model="qs.insertEye" size="large">
         <el-option v-for="item in baseSelectOption" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </div>
     <div class="flex">
       <div>点赞</div>
-      <el-select style="width: 100px" class="no-border" v-model="qs.clickLike" size="large">
+      <el-select style="width: 100px"  v-model="qs.clickLike" size="large">
         <el-option v-for="item in baseSelectOption" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+</style>

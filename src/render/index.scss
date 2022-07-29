@@ -15,27 +15,32 @@
 .el-input.no-border {
   margin: 0 10px;
 }
-.el-input,
-.el-select {
-  &.no-border {
-    .el-input__wrapper {
-      box-shadow: none;
-      border-bottom: 1px solid #dcdfe6;
-      border-radius: 0;
-    }
-  }
-}
+
 .el-checkbox__input.is-checked + .el-checkbox__label {
   color: #333 !important;
+}
+//reset element-ui style
+.el-input__wrapper {
+  @apply shadow-none;
+  &.is-focus,
+  &:hover {
+    @apply shadow-none;
+  }
+}
+.el-select:hover:not(.el-select--disabled) {
+  .el-input__wrapper,
+  .el-input__wrapper.is-focus {
+    @apply shadow-none;
+  }
 }
 
 //
 .draggable-item {
-  @apply flex relative border-sky-100 border rounded-2xl my-1 px-2 cursor-move;
+  @apply flex relative border-gray-300 border rounded-2xl px-2 cursor-move;
   .el-icon {
     @apply absolute right-1 cursor-pointer;
   }
 }
 .draggable-pust {
-  @apply text-3xl flex justify-center items-center cursor-pointer border-b border-sky-100;
+  @apply text-3xl flex justify-center items-center cursor-pointer border-b border-gray-300;
 }

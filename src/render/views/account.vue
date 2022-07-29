@@ -23,19 +23,15 @@ const removeAccountItem = (index) => {
 </script>
 
 <template>
-  <div class="border relative m-4">
-    <input class="peer w-full" type="text" />
-    <label class="absolute left-4 transition-all peer-focus:-translate-y-3 peer-focus:scale-75 pointer-events-none">账号</label>
-  </div>
-  <draggable :list="accountList" item-key="index" ghost-class="ghost" @start="dragging = true" @end="dragging = false">
+  <draggable :list="accountList" class="space-y-2 py-1" item-key="index" ghost-class="ghost" @start="dragging = true" @end="dragging = false">
     <template #item="{ element, index }">
       <div class="draggable-item">
-        <el-input style="width: 150px" placeholder="账号" class="no-border" v-model.trim="element.name" />
-        <el-input style="width: 150px" placeholder="密码" class="no-border" v-model.trim="element.password" />
+        <el-input style="width: 150px" v-model="element.name" placeholder="账号" label="账号" v-model.trim="element.name" clearable />
+        <el-input style="width: 150px" placeholder="密码" v-model.trim="element.password" clearable />
 
         <div class="flex">
           <div>打</div>
-          <el-input style="width: 55px" class="no-border" v-model.number="element.gameCount" />
+          <el-input style="width: 55px" v-model.number="element.gameCount" />
           <div>场</div>
         </div>
         <div class="flex">
@@ -57,4 +53,6 @@ const removeAccountItem = (index) => {
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+</style>
