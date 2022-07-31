@@ -6,7 +6,6 @@ const alias = require('@rollup/plugin-alias')
 const json = require('@rollup/plugin-json')
 
 module.exports = (env = 'production') => {
-  console.log(env === 'production' ? '生产环境打包' : '开发环境打包')
   return {
     input: path.join(__dirname, '../src/main/index.ts'),
     output: {

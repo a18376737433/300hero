@@ -9,30 +9,26 @@ import { icoPath } from '../../../index'
 type Xy = [number, number]
 const store = new Store()
 
-export const setGameCount = (count: number, account: string) => {
-  // store.set('gameCount', {
-  //   [account]: {
-  //     count,
-  //     expire: new Date().setHours(0, 0, 0, 0)
-  //   }
-  // })
-  store.set(
-    'gameCount',
-    Object.assign({}, store.get('gameCount'), {
-      [account]: {
-        count,
-        expire: new Date().setHours(0, 0, 0, 0)
-      }
-    })
-  )
+export const setcounts = (count: number, account: string): void => {
+  const config = store.get('config') as any
+  config.accounts.forEach((item) => {
+    if (item.name === account) {
+      item.expire = new Date().setHours(0, 0, 0, 0)
+      item.current_count = count
+    }
+  })
+  store.set('config', config)
 }
-export const getGameCount = (account: string) => {
-  let res: any = store.get('gameCount')
-  if (res?.[account]?.expire != new Date().setHours(0, 0, 0, 0)) {
-    setGameCount(0, account)
+export const getcounts = (account: string) => {
+  const { accounts } = store.get('config') as any
+  const current_account = accounts.find((item) => item.name === account)
+
+  if (current_account.expire != new Date().setHours(0, 0, 0, 0)) {
+    setcounts(0, account)
     return 0
   }
-  return res?.[account]?.count || 0
+
+  return current_account.count
 }
 /**
  *
@@ -243,11 +239,11 @@ export const useSmallScreen = async (hwnd) => {
 export const isGameEnd = () => {
   return !!dm.findPic(1003, 682, 1197, 761, './img/game_end.bmp', '000000', 0.8, 0)
 }
-export const isBan = () => {
-  return !!dm.findColor(1217, 40, 1253, 79, '800408', 1, 0)
+export const isBan = (sim: number = 0.9): boolean => {
+  return !!dm.findColor(1217, 40, 1253, 79, '800408', sim, 0)
 }
-export const log = (msg, ...args) => {
-  console.log(`[300 hero] ${msg}`, ...args)
+export const log = (msg: any, ...args: any): void => {
+  console.log(`[${new Date().toLocaleString()}] [300 hero]  ${msg}`, ...args)
 }
 
 export const useProp = async (n) => {

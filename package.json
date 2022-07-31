@@ -83,6 +83,7 @@
     "element-plus": "^2.2.11",
     "esbuild": "~0.14.50",
     "minimist": "^1.2.5",
+    "node-schedule": "^2.1.0",
     "ora": "^5.0.0",
     "postcss": "^8.4.14",
     "rimraf": "^3.0.2",

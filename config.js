@@ -1,5 +1,5 @@
 export default {
-  accountList: [],
+  accounts: [],
   mode: 'zc',
   qs: {
     role: [{ equip: [1, 'f'], hou: ['鸡刀', '雷霆'], name: '康娜', skill: 'r' }],
@@ -7,7 +7,7 @@ export default {
     //随机英雄
     isRandom: false,
     //游戏局数
-    gameCount: 50,
+    counts: 50,
     //检测间隔/s
     interval: 1,
     //插眼&点赞

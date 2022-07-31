@@ -1,7 +1,6 @@
-import { globalShortcut, Notification, ipcMain } from 'electron'
+import { globalShortcut, BrowserWindow } from 'electron'
 import { msg } from '../auto-game/utlis'
-import { resolve } from 'path'
-export const useGlobalShortcut = (win) => {
+export const useGlobalShortcut = (win: BrowserWindow): void => {
   const result1 = globalShortcut.register('f1', () => {
     win.webContents.send('shortcut_key', { key: 'f1' })
   })

@@ -1,25 +1,8 @@
-#app {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-.flex {
-  .flex + .flex {
-    margin-left: 10px;
-  }
-  display: flex;
-  align-items: center;
-}
-.el-switch,
-.el-select.no-border,
-.el-input.no-border {
-  margin: 0 10px;
+//reset element-ui style
+.el-switch {
+  @apply ml-2;
 }
 
-.el-checkbox__input.is-checked + .el-checkbox__label {
-  color: #333 !important;
-}
-//reset element-ui style
 .el-input__wrapper {
   @apply shadow-none;
   &.is-focus,
@@ -35,12 +18,19 @@
 }
 
 //
-.draggable-item {
-  @apply flex relative border-gray-300 border rounded-2xl px-2 cursor-move;
-  .el-icon {
-    @apply absolute right-1 cursor-pointer;
+.draggable {
+  @apply py-1 divide-y divide-slate-300;
+  .item {
+    @apply flex items-center relative opacity-80  px-2  hover:opacity-100 cursor-grab py-4;
+    .content {
+      @apply flex items-center px-4;
+    }
+    .icon {
+      @apply absolute right-1 cursor-pointer;
+    }
   }
 }
+
 .draggable-pust {
-  @apply text-3xl flex justify-center items-center cursor-pointer border-b border-gray-300;
+  @apply text-3xl flex justify-center items-center cursor-pointer;
 }

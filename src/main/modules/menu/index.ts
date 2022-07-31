@@ -1,5 +1,5 @@
 import { Menu } from 'electron'
-export const useMenu = (win) => {
+export const useMenu = (): void => {
   const menu = Menu.buildFromTemplate([])
   Menu.setApplicationMenu(menu)
 }

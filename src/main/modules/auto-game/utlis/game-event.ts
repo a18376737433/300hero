@@ -1,14 +1,16 @@
-import { isInHall, isInLogin, isGameing, msg, libDir, getGameCount, setGameCount, useEsc, sleep } from './index'
+import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useEsc, log } from './index'
+import { isBan } from './index'
 import * as dm from '../../dm'
 import Store from 'electron-store'
+const getConfig = (): any => new Store().get('config') || {}
 class GameEvent {
   _callbacks = {}
   _timeId
   _state
 
   hwnd
-  config = new Store().get('config') || ({} as any)
-  currentAccoutn = this.config.accountList?.[0] || {}
+  config = getConfig()
+  currentAccoutn = this.config.accounts?.[0] || {}
   matchInfo = {}
   constructor() {}
   findGameWindow() {
@@ -21,14 +23,14 @@ class GameEvent {
     dm.dll.BindWindowEx(hwnd, 'gdi', 'normal', 'windows', 'dx.public.disable.window.position', 0)
     this.hwnd = hwnd
   }
-  get todayGameCount() {
-    return getGameCount(this.currentAccoutn?.name)
+  get current_count() {
+    return getcounts(this.currentAccoutn?.name)
   }
-  set todayGameCount(val) {
-    setGameCount(val, this.currentAccoutn?.name)
+  set current_count(val) {
+    setcounts(val, this.currentAccoutn?.name)
     global.win.webContents.send('match:update', {
       match: this.matchInfo,
-      count: this.todayGameCount,
+      count: this.current_count,
       account: this.currentAccoutn
     })
   }
@@ -38,14 +40,14 @@ class GameEvent {
 
     if (!this.hwnd) return
     dm.dll.Beep(800, 800)
-    console.log('脚本开始')
+    log('脚本开始')
     dm.dll.SetWindowText(this.hwnd, 'tysb')
     dm.setWindowState(this.hwnd, 1)
-    this.config = new Store().get('config') || {}
+    this.config = getConfig()
     dm.setPath(libDir)
     global.win.webContents.send('match:update', {
       match: this.matchInfo,
-      count: this.todayGameCount,
+      count: this.current_count,
       account: this.currentAccoutn
     })
     //ToDo  大厅背景可能导致不正常
@@ -64,33 +66,30 @@ class GameEvent {
       }
     }, 1000)
   }
+  async test() {
+    this.findGameWindow()
+    dm.setWindowState(this.hwnd, 1)
+    console.log(getcounts('a15078831738'))
+  }
   stop() {
     if (!this._timeId) return
     dm.dll.Beep(500, 500)
-
-    console.log(`[${new Date().toLocaleString()}]`, '脚本停止')
+    log('脚本停止')
     // dm.unBindWindow()
     clearInterval(this._timeId)
     this._timeId = null
     this.state = null
   }
-  async test() {
-    // this.findGameWindow()
-    // dm.setWindowState(this.hwnd, 1)
-    //this.todayGameCount += 1
-    // this.findGameWindow()
-    // dm.setWindowState(this.hwnd, 1)
-    console.log(this.config)
-  }
+
   on(eventName: string, cb: any) {
     this._callbacks[eventName] = (this._callbacks[eventName] || []).concat(cb)
   }
 
   async emit(eventName: string, ...args: any[]) {
-    let { gameCount, name } = this.currentAccoutn || this.config?.accountList[0]
+    let { counts, name } = this.currentAccoutn || this.config?.accounts[0]
 
-    if (this.todayGameCount >= gameCount && this.state == 'dt') {
-      console.log(`${name}这个账号打完了`)
+    if (this.current_count >= counts && this.state == 'dt') {
+      log(`${name}这个账号打完了`)
       await useEsc()
       //this.stop()
       return

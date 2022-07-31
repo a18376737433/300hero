@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join, resolve } from 'path'
 import is_dev from 'electron-is-dev'
-
+import schedule from 'node-schedule'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
 import { useMenu } from './modules/menu'
@@ -9,11 +9,14 @@ import { useTray } from './modules/tray'
 import AutoUpdate from './modules/autoUpdate'
 import { useGlobalShortcut } from './modules/globalShortcut'
 import game from './modules/auto-game'
-import { getGameCount } from './modules/auto-game/utlis'
-console.log(is_dev ? '开发模式' : '生产模式', __dirname)
+import { getcounts } from './modules/auto-game/utlis'
+
 if (!is_dev) {
   new AutoUpdate()
 }
+const job = schedule.scheduleJob('9 * * * *', function (firDate) {
+  console.log('The answer to life, the universe, and everything!' + firDate)
+})
 const getPublicFile = (is_dev: boolean, file: string): string => {
   return is_dev ? resolve(__dirname, `../../src/render/public/${file}`) : resolve(__dirname, `../render/public/${file}`)
 }
@@ -33,13 +36,13 @@ ipcMain.on('onWindow', (e, state) => {
   }
 })
 const store = new Store()
-
+store.set('abc', new Map().set('aaa', { name: 1, age: 2 }))
 ipcMain.on('store:set', async (e, { key, value }) => {
   store.set(key, value)
 })
 ipcMain.on('store:get', (e, name) => {
-  if (name == 'gameCount') {
-    e.returnValue = getGameCount(game.currentAccoutn.name)
+  if (name == 'counts') {
+    e.returnValue = getcounts(game.currentAccoutn.name)
     return
   }
   e.returnValue = store.get(name)
@@ -50,7 +53,7 @@ ipcMain.on('store:get', (e, name) => {
 ipcMain.on('store:delete', async (e, args) => {
   store.delete(args)
 })
-let win
+let win: BrowserWindow
 function createWindow() {
   win = new BrowserWindow({
     width: is_dev ? 1440 : 1280,
@@ -70,7 +73,7 @@ function createWindow() {
   is_dev && win.webContents.openDevTools()
   useTray(win)
   useGlobalShortcut(win)
-  !is_dev&&useMenu(win)
+  !is_dev && useMenu()
   // win.on('minimize', () => {
   //   win.hide()
   // })

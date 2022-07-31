@@ -1,7 +1,7 @@
-import { Tray, Menu } from 'electron'
+import { Tray, Menu, BrowserWindow } from 'electron'
 import { icoPath } from '../../index'
 let appIcon: any
-export const useTray = (win: any): void => {
+export const useTray = (win: BrowserWindow): void => {
   appIcon = new Tray(icoPath)
   appIcon.on('click', () => {
     if (win.isVisible()) {
