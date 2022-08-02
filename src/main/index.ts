@@ -46,7 +46,8 @@ ipcMain.on('store:get', (e, name) => {
   }
   if (name == 'config') {
     const config: any = store.get(name)
-    config.accounts.forEach((account) => {
+    console.log('config :>> ', config);
+    config.accounts?.forEach((account) => {
       if (isExpire(account.expire)) {
         account.current_count = 0
       }

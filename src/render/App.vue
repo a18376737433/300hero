@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import account from './views/account.vue'
 import spring from './views/spring.vue'
 import default_config from '@@/config'

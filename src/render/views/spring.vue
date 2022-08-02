@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import draggable from 'vuedraggable'
 const props = defineProps({
   qs: {
@@ -70,10 +70,19 @@ const HPorMPSelectOption = [
     value: 'MP'
   }
 ]
+const upload = ref()
+const handleExceed = ({ status, raw }) => {
+  if (status !== 'ready') {
+    console.log('选择文件失败')
+    return
+  }
+  upload.value = raw.path
+}
+const fileList = ref([])
 </script>
 
 <template>
-  <draggable :list="qs.role" item-key="index" class="draggable" ghost-class="ghost" @start="dragging = true" @end="dragging = false">
+  <draggable :list="qs.role" item-key="index" class="draggable" ghost-class="ghost">
     <template #item="{ element, index }">
       <div class="item">
         <el-input style="width: 80px" v-model="element.name" />
@@ -146,6 +155,13 @@ const HPorMPSelectOption = [
       </el-select>
     </div>
   </div>
+  <el-upload :show-file-list="false" :limit="1" :auto-upload="false" :on-change="handleExceed">
+    <el-button plain >{{ upload || '选择启动路径' }}</el-button>
+  </el-upload>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+input[type='file'] {
+  display: flex;
+}
+</style>
