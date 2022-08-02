@@ -31,17 +31,10 @@ window.ipcRenderer.on('shortcut_key', (e, { key }) => {
   }
 })
 
-const matchInfo = reactive({
-  count: 0,
-  account: {},
-  match: {}
-})
+const matchInfo = ref({})
 
-matchInfo.count = window.ipcRenderer.sendSync('store:get', 'counts') || 0
-window.ipcRenderer.on('match:update', (e, { count, match, account }) => {
-  matchInfo.count = count
-  matchInfo.match = match
-  matchInfo.account = account
+window.ipcRenderer.on('match:update', (e, currentAccoutn) => {
+  matchInfo.value = currentAccoutn
 })
 const handleWindow = (state) => {
   if (state === 'start') {
@@ -60,15 +53,14 @@ const tabActiveName = ref('spring')
 <template>
   <el-config-provider size="large">
     <div class="main px-1 py-2 overflow-auto h-full">
-      <h4 class="py-2">
-        <span v-if="matchInfo.count">当前局数:{{ matchInfo.count }}</span>
-        <span v-if="matchInfo.account?.name">账号:{{ matchInfo.account?.name }}</span>
-        <span v-show="Object.keys(matchInfo.match).length">角色:{{ matchInfo.match?.role || '未知' }}</span>
-        <span v-show="Object.keys(matchInfo.match).length">{{ matchInfo.match?.isRed ? '红' : '蓝' }}方</span>
+      <h4 class="py-2" v-if="Object.keys(matchInfo).length">
+        <span>当前局数:{{ matchInfo.current_count }}</span>
+        <span>账号:{{ matchInfo.name }}</span>
       </h4>
       <el-radio-group v-model="config.mode" size="large">
         <el-radio-button label="zc">战场</el-radio-button>
         <el-radio-button label="dds">惇惇兽</el-radio-button>
+        <el-radio-button label="sz">神战</el-radio-button>
       </el-radio-group>
       <el-tabs tab-position="left" v-model="tabActiveName">
         <el-tab-pane name="spring">

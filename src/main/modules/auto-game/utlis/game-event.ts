@@ -1,8 +1,19 @@
-import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useEsc, log } from './index'
+import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useEsc, log, isExpire } from './index'
 import { isBan } from './index'
 import * as dm from '../../dm'
 import Store from 'electron-store'
 const getConfig = (): any => new Store().get('config') || {}
+const getAccoutn = () => {
+  const { accounts = [] } = getConfig()
+  for (const item of accounts) {
+    if (getcounts(item.name) < item.counts) {
+      log(item.name)
+      return item
+    }
+  }
+  log('获取到账号为空')
+  return {}
+}
 class GameEvent {
   _callbacks = {}
   _timeId
@@ -10,8 +21,9 @@ class GameEvent {
 
   hwnd
   config = getConfig()
-  currentAccoutn = this.config.accounts?.[0] || {}
+  currentAccoutn = getAccoutn()
   matchInfo = {}
+
   constructor() {}
   findGameWindow() {
     const hwnd = dm.findWindow('WWW_JUMPW_COM', '')
@@ -27,12 +39,9 @@ class GameEvent {
     return getcounts(this.currentAccoutn?.name)
   }
   set current_count(val) {
+    console.log('val :>> ', val, this.currentAccoutn?.name)
     setcounts(val, this.currentAccoutn?.name)
-    global.win.webContents.send('match:update', {
-      match: this.matchInfo,
-      count: this.current_count,
-      account: this.currentAccoutn
-    })
+    global.win.webContents.send('match:update', this.currentAccoutn)
   }
   async start() {
     if (this._timeId) return
@@ -44,12 +53,9 @@ class GameEvent {
     dm.dll.SetWindowText(this.hwnd, 'tysb')
     dm.setWindowState(this.hwnd, 1)
     this.config = getConfig()
+    this.currentAccoutn = getAccoutn()
     dm.setPath(libDir)
-    global.win.webContents.send('match:update', {
-      match: this.matchInfo,
-      count: this.current_count,
-      account: this.currentAccoutn
-    })
+    global.win.webContents.send('match:update', this.currentAccoutn)
     //ToDo  大厅背景可能导致不正常
     this._timeId = setInterval(() => {
       if (isGameing()) {
@@ -69,7 +75,7 @@ class GameEvent {
   async test() {
     this.findGameWindow()
     dm.setWindowState(this.hwnd, 1)
-    console.log(getcounts('a15078831738'))
+    console.log(getAccoutn())
   }
   stop() {
     if (!this._timeId) return

@@ -8,13 +8,14 @@ import Store from 'electron-store'
 import { icoPath } from '../../../index'
 type Xy = [number, number]
 const store = new Store()
-
+export const isExpire = (expire: number): boolean => expire != new Date().setHours(0, 0, 0, 0)
 export const setcounts = (count: number, account: string): void => {
   const config = store.get('config') as any
   config.accounts.forEach((item) => {
     if (item.name === account) {
       item.expire = new Date().setHours(0, 0, 0, 0)
       item.current_count = count
+      console.log(item.current_count + '/' + item.counts)
     }
   })
   store.set('config', config)
@@ -22,13 +23,11 @@ export const setcounts = (count: number, account: string): void => {
 export const getcounts = (account: string) => {
   const { accounts } = store.get('config') as any
   const current_account = accounts.find((item) => item.name === account)
-
-  if (current_account.expire != new Date().setHours(0, 0, 0, 0)) {
+  if (isExpire(current_account.expire)) {
     setcounts(0, account)
     return 0
   }
-
-  return current_account.count
+  return current_account.current_count
 }
 /**
  *

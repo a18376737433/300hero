@@ -9,7 +9,7 @@ import { useTray } from './modules/tray'
 import AutoUpdate from './modules/autoUpdate'
 import { useGlobalShortcut } from './modules/globalShortcut'
 import game from './modules/auto-game'
-import { getcounts } from './modules/auto-game/utlis'
+import { getcounts, isExpire } from './modules/auto-game/utlis'
 
 if (!is_dev) {
   new AutoUpdate()
@@ -36,13 +36,22 @@ ipcMain.on('onWindow', (e, state) => {
   }
 })
 const store = new Store()
-store.set('abc', new Map().set('aaa', { name: 1, age: 2 }))
 ipcMain.on('store:set', async (e, { key, value }) => {
   store.set(key, value)
 })
 ipcMain.on('store:get', (e, name) => {
   if (name == 'counts') {
     e.returnValue = getcounts(game.currentAccoutn.name)
+    return
+  }
+  if (name == 'config') {
+    const config: any = store.get(name)
+    config.accounts.forEach((account) => {
+      if (isExpire(account.expire)) {
+        account.current_count = 0
+      }
+    })
+    e.returnValue = config
     return
   }
   e.returnValue = store.get(name)
