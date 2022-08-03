@@ -1,6 +1,7 @@
 export default {
   accounts: [],
   mode: 'zc',
+  path: '',
   qs: {
     role: [{ equip: [1, 'f'], hou: ['鸡刀', '雷霆'], name: '康娜', skill: 'r' }],
 

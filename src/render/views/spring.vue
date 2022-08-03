@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-const { qs } = defineProps({
-  qs: {
-    type: Object,
-    default: () => {}
-  }
-})
+const { config } = defineProps(['config'])
 const pushAccountItem = () => {
-  qs.role?.push({ equip: [], hou: [], name: '', skill: '' })
+  config.qs.role?.push({ equip: [], hou: [], name: '', skill: '' })
 }
 const removeAccountItem = (index) => {
-  qs.role?.splice(index, 1)
+  config.qs.role?.splice(index, 1)
 }
 const equipSelectOption = [
   {
@@ -70,22 +65,20 @@ const HPorMPSelectOption = [
     value: 'MP'
   }
 ]
-const upload = ref()
 const handleExceed = ({ status, raw }) => {
   if (status !== 'ready') {
     console.log('选择文件失败')
     return
   }
-  upload.value = raw.path
+  config.path = raw.path
 }
-const fileList = ref([])
 </script>
 
 <template>
-  <draggable :list="qs.role" item-key="index" class="draggable" ghost-class="ghost">
+  <draggable :list="config.qs.role" item-key="index" class="draggable" ghost-class="ghost">
     <template #item="{ element, index }">
       <div class="item">
-        <el-input style="width: 80px" v-model="element.name" />
+        <el-input class="w-28" v-model="element.name" />
         <div class="content">
           <div>对泉水</div>
           <el-switch v-model="element.isSpring" />
@@ -116,47 +109,47 @@ const fileList = ref([])
     <el-icon color="#409eff"><circle-plus /></el-icon>
   </div>
   <div style="margin-top: 20px" class="flex items-center">
-    <div class="flex items-center">神器在<span style="color: #5352ed">装备栏</span>的位置 <el-input style="width: 55px" v-model="qs.zb_index" /></div>
-    <div class="flex items-center">雷霆在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" v-model="qs.lt_index" /></div>
-    <div class="flex items-center">鸡刀在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" v-model="qs.jd_index" /></div>
-    <div class="flex items-center">神器在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" v-model="qs.sq_index" /></div>
+    <div class="flex items-center">神器在<span style="color: #5352ed">装备栏</span>的位置 <el-input style="width: 55px" v-model="config.qs.zb_index" /></div>
+    <div class="flex items-center">雷霆在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" v-model="config.qs.lt_index" /></div>
+    <div class="flex items-center">鸡刀在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" v-model="config.qs.jd_index" /></div>
+    <div class="flex items-center">神器在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" v-model="config.qs.sq_index" /></div>
   </div>
   <div class="flex items-center">
-    <el-checkbox v-model="qs.stateDefend" name="type" />
+    <el-checkbox v-model="config.qs.stateDefend" name="type" />
 
     <div class="flex items-center">
-      <el-select style="width: 80px" v-model="qs.hpOrMP">
+      <el-select style="width: 80px" v-model="config.qs.hpOrMP">
         <el-option v-for="item in HPorMPSelectOption" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
       <div>低于</div>
-      <el-input style="width: 55px" v-model="qs.lower" />
+      <el-input style="width: 55px" v-model="config.qs.lower" />
       <div>% 使用</div>
-      <el-select multiple v-model="qs.equip">
+      <el-select multiple v-model="config.qs.equip">
         <el-option v-for="item in equipSelectOption" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </div>
     <div class="flex items-center">
       <div>检测间隔</div>
-      <el-input style="width: 55px" v-model="qs.interval" />
+      <el-input style="width: 55px" v-model="config.qs.interval" />
       <div>秒</div>
     </div>
   </div>
   <div class="flex items-center">
     <div class="flex items-center">
       <div>插眼</div>
-      <el-select style="width: 100px" v-model="qs.insertEye">
+      <el-select style="width: 100px" v-model="config.qs.insertEye">
         <el-option v-for="item in baseSelectOption" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </div>
     <div class="flex items-center">
       <div>点赞</div>
-      <el-select style="width: 100px" v-model="qs.clickLike">
+      <el-select style="width: 100px" v-model="config.qs.clickLike">
         <el-option v-for="item in baseSelectOption" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </div>
   </div>
-  <el-upload :show-file-list="false" :limit="1" :auto-upload="false" :on-change="handleExceed">
-    <el-button plain>{{ upload || '选择启动路径' }}</el-button>
+  <el-upload accept=".exe" :show-file-list="false" :limit="1" :auto-upload="false" :on-change="handleExceed">
+    <el-button plain>{{ config.path || '选择启动路径' }}</el-button>
   </el-upload>
 </template>
 

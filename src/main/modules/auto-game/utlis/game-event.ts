@@ -16,7 +16,7 @@ const getAccoutn = () => {
   log('获取到账号为空')
   return {}
 }
-class GameEvent {
+class GameEvent extends Task {
   _callbacks = {}
   _timeId
   _state
@@ -26,7 +26,9 @@ class GameEvent {
   currentAccoutn = getAccoutn()
   matchInfo = {}
 
-  constructor() {}
+  constructor() {
+    super()
+  }
   findGameWindow() {
     const hwnd = dm.findWindow('WWW_JUMPW_COM', '')
     if (!hwnd) {
@@ -77,8 +79,7 @@ class GameEvent {
   async test() {
     // this.findGameWindow()
     // dm.setWindowState(this.hwnd, 1)
-    const a = new Task()
-    console.log(a.openGame('E:\\CloudMusic\\cloudmusic.exe'))
+    console.log(this.openGame(this.config.path))
   }
   stop() {
     if (!this._timeId) return
@@ -89,7 +90,12 @@ class GameEvent {
     this._timeId = null
     this.state = null
   }
-
+  gb() {
+    this.kill()
+  }
+  jc() {
+    console.log(this.isRunning())
+  }
   on(eventName: string, cb: any) {
     this._callbacks[eventName] = (this._callbacks[eventName] || []).concat(cb)
   }

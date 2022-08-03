@@ -23,21 +23,23 @@ const getPublicFile = (is_dev: boolean, file: string): string => {
 export const icoPath = getPublicFile(is_dev, '1.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
 ipcMain.on('onWindow', (e, state) => {
-  switch (state) {
-    case 'start':
-      game.start()
-      break
-    case 'stop':
-      game.stop()
-      break
-    default:
-      game.test()
-      break
-  }
+  game[state] && game[state]()
+  // switch (state) {
+  //   case 'start':
+  //     game.start()
+  //     break
+  //   case 'stop':
+  //     game.stop()
+  //     break
+  //   default:
+  //     game.test()
+  //     break
+  // }
 })
 const store = new Store()
 ipcMain.on('store:set', async (e, { key, value }) => {
   store.set(key, value)
+  console.log("store.get('config')", store.get('config'))
 })
 ipcMain.on('store:get', (e, name) => {
   if (name == 'counts') {
@@ -46,7 +48,6 @@ ipcMain.on('store:get', (e, name) => {
   }
   if (name == 'config') {
     const config: any = store.get(name)
-    console.log('config :>> ', config);
     config.accounts?.forEach((account) => {
       if (isExpire(account.expire)) {
         account.current_count = 0

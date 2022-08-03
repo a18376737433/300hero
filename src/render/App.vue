@@ -10,12 +10,18 @@ const loaded = () => {
 
 console.log('window.ipcRenderer :>> ', window.ipcRenderer)
 let preConfig = window.ipcRenderer.sendSync('store:get', 'config')
-console.log('默认配置', default_config)
-console.log('用户配置', preConfig)
 
-const config = reactive(preConfig || default_config)
+const config = reactive({ ...default_config, ...preConfig })
+console.log('用户配置', config)
+
 loaded()
-
+watch(config, () => {
+  window.ipcRenderer.send('store:set', {
+    key: 'config',
+    value: JSON.parse(JSON.stringify(config))
+  })
+  console.log('储存变动配置')
+})
 //监听main的快捷键事件
 window.ipcRenderer.on('shortcut_key', (e, { key }) => {
   switch (key) {
@@ -38,7 +44,6 @@ window.ipcRenderer.on('match:update', (e, currentAccoutn) => {
 })
 const handleWindow = (state) => {
   if (state === 'start') {
-    console.log(config)
     window.ipcRenderer.send('store:set', {
       key: 'config',
       value: JSON.parse(JSON.stringify(config))
@@ -70,7 +75,7 @@ const tabActiveName = ref('spring')
               泉水
             </span>
           </template>
-          <spring :qs="config.qs" />
+          <spring :config="config" />
         </el-tab-pane>
         <el-tab-pane name="account">
           <template #label>
@@ -87,6 +92,8 @@ const tabActiveName = ref('spring')
         <el-button type="primary" @click="handleWindow('start')">开始(F1)</el-button>
         <el-button type="danger" @click="handleWindow('stop')">停止(F2)</el-button>
         <el-button type="success" @click="handleWindow('test')">Test</el-button>
+        <el-button type="success" @click="handleWindow('gb')">关闭GAME</el-button>
+        <el-button type="success" @click="handleWindow('jc')">检测GAME</el-button>
       </div>
     </div>
   </el-config-provider>
