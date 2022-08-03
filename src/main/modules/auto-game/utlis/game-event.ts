@@ -1,6 +1,8 @@
 import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useEsc, log, isExpire } from './index'
 import { isBan } from './index'
 import * as dm from '../../dm'
+import { execSync, exec } from 'child_process'
+import { Task } from '../../../utils'
 import Store from 'electron-store'
 const getConfig = (): any => new Store().get('config') || {}
 const getAccoutn = () => {
@@ -73,9 +75,10 @@ class GameEvent {
     }, 1000)
   }
   async test() {
-    this.findGameWindow()
-    dm.setWindowState(this.hwnd, 1)
-    console.log(getAccoutn())
+    // this.findGameWindow()
+    // dm.setWindowState(this.hwnd, 1)
+    const a = new Task()
+    console.log(a.openGame('E:\\CloudMusic\\cloudmusic.exe'))
   }
   stop() {
     if (!this._timeId) return

@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import draggable from 'vuedraggable'
-const props = defineProps({
+const { qs } = defineProps({
   qs: {
     type: Object,
     default: () => {}
   }
 })
 const pushAccountItem = () => {
-  props.qs.role?.push({ equip: [], hou: [], name: '', skill: '' })
+  qs.role?.push({ equip: [], hou: [], name: '', skill: '' })
 }
 const removeAccountItem = (index) => {
-  props.qs.role?.splice(index, 1)
+  qs.role?.splice(index, 1)
 }
 const equipSelectOption = [
   {
@@ -156,7 +156,7 @@ const fileList = ref([])
     </div>
   </div>
   <el-upload :show-file-list="false" :limit="1" :auto-upload="false" :on-change="handleExceed">
-    <el-button plain >{{ upload || '选择启动路径' }}</el-button>
+    <el-button plain>{{ upload || '选择启动路径' }}</el-button>
   </el-upload>
 </template>
 
