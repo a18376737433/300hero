@@ -52,7 +52,7 @@ dependencies:
   winax: registry.npmmirror.com/winax/3.3.4
 
 devDependencies:
-  '@rollup/plugin-alias': 3.1.9_rollup@2.77.2
+  '@rollup/plugin-alias': registry.npmmirror.com/@rollup/plugin-alias/3.1.9_rollup@2.77.2
   '@rollup/plugin-commonjs': 22.0.1_rollup@2.77.2
   '@rollup/plugin-json': 4.1.0_rollup@2.77.2
   '@rollup/plugin-node-resolve': 13.3.0_rollup@2.77.2
@@ -225,16 +225,6 @@ packages:
     dependencies:
       mkdirp: 1.0.4
       rimraf: 3.0.2
-    dev: true
-
-  /@rollup/plugin-alias/3.1.9_rollup@2.77.2:
-    resolution: {integrity: sha512-QI5fsEvm9bDzt32k39wpOwZhVzRcL5ydcffUHMyLVaVaLeC70I8TJZ17F1z1eMoLu4E/UOcH9BWVkKpIKdrfiw==}
-    engines: {node: '>=8.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0
-    dependencies:
-      rollup: 2.77.2
-      slash: 3.0.0
     dev: true
 
   /@rollup/plugin-commonjs/22.0.1_rollup@2.77.2:
@@ -3248,11 +3238,6 @@ packages:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
     dev: true
 
-  /slash/3.0.0:
-    resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
-    engines: {node: '>=8'}
-    dev: true
-
   /smart-buffer/4.2.0:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
     engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
@@ -4018,6 +4003,19 @@ packages:
       fd-slicer: 1.1.0
     dev: true
 
+  registry.npmmirror.com/@rollup/plugin-alias/3.1.9_rollup@2.77.2:
+    resolution: {integrity: sha512-QI5fsEvm9bDzt32k39wpOwZhVzRcL5ydcffUHMyLVaVaLeC70I8TJZ17F1z1eMoLu4E/UOcH9BWVkKpIKdrfiw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@rollup/plugin-alias/-/plugin-alias-3.1.9.tgz}
+    id: registry.npmmirror.com/@rollup/plugin-alias/3.1.9
+    name: '@rollup/plugin-alias'
+    version: 3.1.9
+    engines: {node: '>=8.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0
+    dependencies:
+      rollup: 2.77.2
+      slash: registry.npmmirror.com/slash/3.0.0
+    dev: true
+
   registry.npmmirror.com/@sxzz/popperjs-es/2.11.7:
     resolution: {integrity: sha512-Ccy0NlLkzr0Ex2FKvh2X+OyERHXJ88XJ1MXtsI9y9fGexlaXaVTPzBCRBwIxFkORuOb+uBqeu+RqnpgYTEZRUQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@sxzz/popperjs-es/-/popperjs-es-2.11.7.tgz}
     name: '@sxzz/popperjs-es'
@@ -4502,6 +4500,13 @@ packages:
       tslib: 2.4.0
     dev: false
     optional: true
+
+  registry.npmmirror.com/slash/3.0.0:
+    resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/slash/-/slash-3.0.0.tgz}
+    name: slash
+    version: 3.0.0
+    engines: {node: '>=8'}
+    dev: true
 
   registry.npmmirror.com/supports-preserve-symlinks-flag/1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz}

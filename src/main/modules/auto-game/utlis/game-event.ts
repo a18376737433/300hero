@@ -3,7 +3,7 @@ import { isBan } from './index'
 import * as dm from '../../dm'
 import { parse } from 'url'
 import { execSync, exec } from 'child_process'
-import { Task } from '../../../utils'
+import { Task } from '@/core/Task'
 import Store from 'electron-store'
 const getConfig = (): any => new Store().get('config') || {}
 const getAccoutn = () => {

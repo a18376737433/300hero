@@ -4,7 +4,7 @@ const commonjs = require('@rollup/plugin-commonjs')
 const esbuild = require('rollup-plugin-esbuild')
 const alias = require('@rollup/plugin-alias')
 const json = require('@rollup/plugin-json')
-
+const root = path.resolve(__dirname, '../src/main/')
 module.exports = (env = 'production') => {
   return {
     input: path.join(__dirname, '../src/main/index.ts'),
@@ -44,13 +44,23 @@ module.exports = (env = 'production') => {
       alias({
         entries: [
           {
-            find: '@',
-            replacement: () => {
-              return path.resolve(__dirname, '../src')
+            find: /^@\/(.*)/,
+            replacement: ($0, $1, ...e) => {
+              console.log('????', $0, $1, e)
+
+              return path.join(root, `${$1}.ts`)
             }
-            // path.join(__dirname, "../src/main")
           }
         ]
+        // entries: [
+        //   { find: /^@\/(.*)/, replacement: '$1.alias' },
+        //   {
+        //     find: '@',
+        //     replacement: path.join(__dirname, '../src/main')
+
+        //     // OR place `customResolver` here. See explanation below.
+        //   }
+        // ]
       })
     ],
     external: ['crypto', 'assert', 'fs', 'util', 'os', 'events', 'child_process', 'http', 'https', 'path', 'electron']

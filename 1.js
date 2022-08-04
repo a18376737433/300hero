@@ -1,4 +1,6 @@
-const EventEmitter = require('events')
+const EventEmitter = require('events').EventEmitter
+console.log(new EventEmitter());
+return
 const events = new EventEmitter()
 function task1(v) {
   setTimeout(() => {
