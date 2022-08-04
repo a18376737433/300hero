@@ -10,6 +10,13 @@
     @apply shadow-none;
   }
 }
+.el-input-number.is-controls-right {
+  .el-input-number__increase,
+  .el-input-number__decrease {
+    @apply border-l-0;
+  }
+}
+
 .el-select:hover:not(.el-select--disabled) {
   .el-input__wrapper,
   .el-input__wrapper.is-focus {

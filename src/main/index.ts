@@ -11,9 +11,8 @@ import { useGlobalShortcut } from './modules/globalShortcut'
 import game from './modules/auto-game'
 import { getcounts, isExpire } from './modules/auto-game/utlis'
 
-if (!is_dev) {
-  new AutoUpdate()
-}
+!is_dev && new AutoUpdate()
+
 const job = schedule.scheduleJob('9 * * * *', function (firDate) {
   console.log('The answer to life, the universe, and everything!' + firDate)
 })
@@ -39,7 +38,6 @@ ipcMain.on('onWindow', (e, state) => {
 const store = new Store()
 ipcMain.on('store:set', async (e, { key, value }) => {
   store.set(key, value)
-  console.log("store.get('config')", store.get('config'))
 })
 ipcMain.on('store:get', (e, name) => {
   if (name == 'counts') {

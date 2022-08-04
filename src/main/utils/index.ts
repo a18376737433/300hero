@@ -1,37 +1,33 @@
 import { execSync, exec } from 'child_process'
 import { log } from '../modules/auto-game/utlis/index'
-//src\main\modules\auto-game\utlis\index.ts
+import url from 'url'
+import Store from 'electron-store'
+const getConfig = (): any => new Store().get('config') || {}
 export class Task {
-  #PID: number | null
-  #name: string = '300.exe'
-
-  constructor() {
-    this.#PID = this.getPid()
+  constructor() {}
+  getGameName(path: string): string {
+    return url.parse(path).path!.split('/').pop() as string
   }
-
   //获取进程Pid
-  getPid(taskName: string = this.#name): number | null {
-    const name = taskName.endsWith('.exe') ? taskName : `${taskName}.exe`
+  getPid(): number | null {
+    const name = this.getGameName(getConfig().path)
     const task = execSync('tasklist')
       .toString()
       .split('\n')
       .map((line) => line.trim().split(/\s+/))
       .filter((line) => line[0] === name)[0]
+    console.log(name, task?.[1])
     if (!task) return null
 
     return +task[1]
   }
-
-  /**
-   *
-   * @param path 游戏路径
-   */
-  openGame(path: string): void {
+  
+  openGame(): void {
     if (this.getPid()) {
       log('游戏已经运行 启动失败')
       return
     }
-    exec(path)
+    exec(getConfig().path)
     log('运行游戏')
   }
 

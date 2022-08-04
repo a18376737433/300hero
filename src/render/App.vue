@@ -2,28 +2,28 @@
 import account from './views/account.vue'
 import spring from './views/spring.vue'
 import default_config from '@@/config'
-
+import { useIpcRenderer } from '@vueuse/electron'
+import type { Account } from 'config'
 const loaded = () => {
   const appLoading = document.getElementById('apploading')
   if (appLoading) appLoading.style.display = 'none'
 }
+const { sendSync, send, on } = useIpcRenderer()
+const preConfig = sendSync('store:get', 'config')
+const config = reactive(Object.assign({}, default_config, preConfig.value))
 
-console.log('window.ipcRenderer :>> ', window.ipcRenderer)
-let preConfig = window.ipcRenderer.sendSync('store:get', 'config')
-
-const config = reactive({ ...default_config, ...preConfig })
 console.log('用户配置', config)
 
 loaded()
 watch(config, () => {
-  window.ipcRenderer.send('store:set', {
+  send('store:set', {
     key: 'config',
     value: JSON.parse(JSON.stringify(config))
   })
   console.log('储存变动配置')
 })
 //监听main的快捷键事件
-window.ipcRenderer.on('shortcut_key', (e, { key }) => {
+on('shortcut_key', (e, { key }) => {
   switch (key) {
     case 'f1':
       handleWindow('start')
@@ -37,19 +37,19 @@ window.ipcRenderer.on('shortcut_key', (e, { key }) => {
   }
 })
 
-const matchInfo = ref({})
+const matchInfo = ref<Account | any>({})
 
-window.ipcRenderer.on('match:update', (e, currentAccoutn) => {
+on('match:update', (e, currentAccoutn) => {
   matchInfo.value = currentAccoutn
 })
 const handleWindow = (state) => {
   if (state === 'start') {
-    window.ipcRenderer.send('store:set', {
+    send('store:set', {
       key: 'config',
       value: JSON.parse(JSON.stringify(config))
     })
   }
-  window.ipcRenderer.send('onWindow', state)
+  send('onWindow', state)
 }
 
 const tabActiveName = ref('spring')
@@ -89,11 +89,11 @@ const tabActiveName = ref('spring')
       </el-tabs>
 
       <div class="fixed p-2 bottom-0 flex justify-end w-screen 2">
-        <el-button type="primary" @click="handleWindow('start')">开始(F1)</el-button>
-        <el-button type="danger" @click="handleWindow('stop')">停止(F2)</el-button>
-        <el-button type="success" @click="handleWindow('test')">Test</el-button>
-        <el-button type="success" @click="handleWindow('gb')">关闭GAME</el-button>
-        <el-button type="success" @click="handleWindow('jc')">检测GAME</el-button>
+        <el-button plain type="primary" @click="handleWindow('start')">开始(F1)</el-button>
+        <el-button plain type="danger" @click="handleWindow('stop')">停止(F2)</el-button>
+        <el-button plain type="success" @click="handleWindow('test')">Test</el-button>
+        <el-button plain type="success" @click="handleWindow('gb')">关闭GAME</el-button>
+        <el-button plain type="success" @click="handleWindow('jc')">检测GAME</el-button>
       </div>
     </div>
   </el-config-provider>

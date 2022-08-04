@@ -1,6 +1,7 @@
 import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useEsc, log, isExpire } from './index'
 import { isBan } from './index'
 import * as dm from '../../dm'
+import { parse } from 'url'
 import { execSync, exec } from 'child_process'
 import { Task } from '../../../utils'
 import Store from 'electron-store'
@@ -79,7 +80,7 @@ class GameEvent extends Task {
   async test() {
     // this.findGameWindow()
     // dm.setWindowState(this.hwnd, 1)
-    console.log(this.openGame(this.config.path))
+    this.openGame()
   }
   stop() {
     if (!this._timeId) return

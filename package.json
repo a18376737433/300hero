@@ -72,6 +72,7 @@
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@vitejs/plugin-vue": "^3.0.1",
     "@vue/compiler-sfc": "^3.2.37",
+    "@vueuse/electron": "^9.0.2",
     "autoprefixer": "^10.4.7",
     "chalk": "^4.1.0",
     "concurrently": "^5.3.0",
