@@ -1,11 +1,11 @@
-import * as dm from '../../dm'
-import XY from './xy'
-import KEY from './key'
+import * as dm from '@/modules/dm'
+import XY from '@/modules/auto-game/utlis/xy'
+import KEY from '@/modules/auto-game/utlis/key'
 import { resolve, join } from 'path'
 import { Notification } from 'electron'
 import isDevelop from 'electron-is-dev'
 import Store from 'electron-store'
-import { icoPath } from '../../../index'
+import { icoPath } from '@/index'
 type Xy = [number, number]
 const store = new Store()
 export const isExpire = (expire: number): boolean => expire != new Date().setHours(0, 0, 0, 0)

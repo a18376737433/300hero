@@ -1,6 +1,6 @@
-import * as dm from '../../dm'
-import XY from '../utlis/xy'
-import { sleep, msg, getcounts } from '../utlis'
+import * as dm from '@/modules/dm'
+import XY from '@/modules/auto-game/utlis/xy'
+import { sleep, msg, getcounts } from '@/modules/auto-game/utlis'
 export async function useLogin(hwnd) {
   console.log('登陆界面', hwnd)
   // if (!this.config.qs.reconnect) {

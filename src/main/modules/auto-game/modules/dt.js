@@ -1,7 +1,7 @@
-import * as dm from '../../dm'
-import XY from '../utlis/xy'
-import KEY from '../utlis/key'
-import { isBan, sleep, leftClick, checkedRole, isCheckedRole, isInHall } from '../utlis'
+import XY from '@/modules/auto-game/utlis/xy'
+import KEY from '@/modules/auto-game/utlis/key'
+import * as dm from '@/modules/dm'
+import { isBan, sleep, leftClick, checkedRole, isCheckedRole, isInHall } from '@/modules/auto-game/utlis'
 const _entry = [
   XY.play,
   XY.zc,

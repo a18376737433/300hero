@@ -1,8 +1,5 @@
-import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useEsc, log, isExpire } from './index'
-import { isBan } from '@/modules/auto-game/utlis/index'
-import * as dm from '../../dm'
-import { parse } from 'url'
-import { execSync, exec } from 'child_process'
+import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useEsc, log, isExpire } from '@/modules/auto-game/utlis'
+import * as dm from '@/modules/dm'
 import { Task } from '@/core/Task'
 import Store from 'electron-store'
 const getConfig = (): any => new Store().get('config') || {}
