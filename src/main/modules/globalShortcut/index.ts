@@ -1,5 +1,5 @@
 import { globalShortcut, BrowserWindow } from 'electron'
-import { msg } from '../auto-game/utlis'
+import { msg } from '@/modules/auto-game/utlis'
 export const useGlobalShortcut = (win: BrowserWindow): void => {
   const result1 = globalShortcut.register('f1', () => {
     win.webContents.send('shortcut_key', { key: 'f1' })

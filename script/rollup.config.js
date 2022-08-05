@@ -4,7 +4,8 @@ const commonjs = require('@rollup/plugin-commonjs')
 const esbuild = require('rollup-plugin-esbuild')
 const alias = require('@rollup/plugin-alias')
 const json = require('@rollup/plugin-json')
-const root = path.resolve(__dirname, '../src/main/')
+const fg = require('fast-glob')
+
 module.exports = (env = 'production') => {
   return {
     input: path.join(__dirname, '../src/main/index.ts'),
@@ -45,10 +46,11 @@ module.exports = (env = 'production') => {
         entries: [
           {
             find: /^@\/(.*)/,
-            replacement: ($0, $1, ...e) => {
-              console.log('????', $0, $1, e)
-
-              return path.join(root, `${$1}.ts`)
+            replacement: (_, name) => {
+              const root = path.resolve(__dirname, '../src/main')
+              const files = fg.sync([`${name}.*`, `${name}/index.*`], { cwd: root })
+              if (!files.length) return name
+              return path.resolve(root, files[0])
             }
           }
         ]

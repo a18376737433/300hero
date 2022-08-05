@@ -1,5 +1,5 @@
 import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useEsc, log, isExpire } from './index'
-import { isBan } from './index'
+import { isBan } from '@/modules/auto-game/utlis/index'
 import * as dm from '../../dm'
 import { parse } from 'url'
 import { execSync, exec } from 'child_process'

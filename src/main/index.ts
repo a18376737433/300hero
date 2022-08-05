@@ -4,12 +4,12 @@ import is_dev from 'electron-is-dev'
 import schedule from 'node-schedule'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
-import { useMenu } from './modules/menu'
-import { useTray } from './modules/tray'
-import AutoUpdate from './modules/autoUpdate'
-import { useGlobalShortcut } from './modules/globalShortcut'
-import game from './modules/auto-game'
-import { getcounts, isExpire } from './modules/auto-game/utlis'
+import { useMenu } from '@/modules/menu'
+import { useTray } from '@/modules/tray'
+import AutoUpdate from '@/modules/autoUpdate'
+import { useGlobalShortcut } from '@/modules/globalShortcut'
+import game from '@/modules/auto-game'
+import { getcounts, isExpire } from '@/modules/auto-game/utlis'
 
 !is_dev && new AutoUpdate()
 

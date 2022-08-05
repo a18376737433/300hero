@@ -1,5 +1,5 @@
 import { Tray, Menu, BrowserWindow } from 'electron'
-import { icoPath } from '../../index'
+import { icoPath } from '@/index'
 let appIcon: any
 export const useTray = (win: BrowserWindow): void => {
   appIcon = new Tray(icoPath)
