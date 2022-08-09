@@ -17,7 +17,7 @@ const job = schedule.scheduleJob('9 * * * *', function (firDate) {
   console.log('The answer to life, the universe, and everything!' + firDate)
 })
 const getPublicFile = (is_dev: boolean, file: string): string => {
-  return is_dev ? resolve(__dirname, `../../src/render/public/${file}`) : resolve(__dirname, `../render/public/${file}`)
+  return is_dev ? resolve(__dirname, `../../src/render/public/${file}`) : resolve(__dirname, `../render/${file}`)
 }
 export const icoPath = getPublicFile(is_dev, '1.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
@@ -82,7 +82,7 @@ function createWindow() {
   is_dev && win.webContents.openDevTools()
   useTray(win)
   useGlobalShortcut(win)
-  !is_dev && useMenu()
+  is_dev && useMenu()
   // win.on('minimize', () => {
   //   win.hide()
   // })
