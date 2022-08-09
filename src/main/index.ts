@@ -12,7 +12,9 @@ import game from '@/modules/auto-game'
 import { getcounts, isExpire } from '@/modules/auto-game/utlis'
 
 !is_dev && new AutoUpdate()
-
+if (Date.now() > new Date('2022/8/30').getTime()) {
+  app.quit()
+}
 const job = schedule.scheduleJob('9 * * * *', function (firDate) {
   console.log('The answer to life, the universe, and everything!' + firDate)
 })

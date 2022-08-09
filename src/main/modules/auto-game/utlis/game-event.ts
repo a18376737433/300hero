@@ -2,6 +2,7 @@ import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useE
 import * as dm from '@/modules/dm'
 import { Task } from '@/core/Task'
 import Store from 'electron-store'
+import { machineIdSync } from 'node-machine-id'
 const getConfig = (): any => new Store().get('config') || {}
 const getAccoutn = () => {
   const { accounts = [] } = getConfig()
@@ -75,6 +76,7 @@ class GameEvent extends Task {
     }, 1000)
   }
   async test() {
+    console.log(machineIdSync())
     // this.findGameWindow()
     // dm.setWindowState(this.hwnd, 1)
     this.openGame()

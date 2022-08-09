@@ -4,6 +4,7 @@ import spring from './views/spring.vue'
 import default_config from '@@/config'
 import { useIpcRenderer } from '@vueuse/electron'
 import type { Account } from 'config'
+
 const loaded = () => {
   const appLoading = document.getElementById('apploading')
   if (appLoading) appLoading.style.display = 'none'
@@ -91,7 +92,7 @@ const tabActiveName = ref('spring')
       <div class="fixed p-2 bottom-0 flex justify-end w-screen 2">
         <el-button plain type="primary" @click="handleWindow('start')">开始(F1)</el-button>
         <el-button plain type="danger" @click="handleWindow('stop')">停止(F2)</el-button>
-        <el-button plain type="success" @click="handleWindow('test')">Test</el-button>
+        <el-button plain type="success" @click="handleWindow('test')">启动GAME</el-button>
         <el-button plain type="success" @click="handleWindow('gb')">关闭GAME</el-button>
         <el-button plain type="success" @click="handleWindow('jc')">检测GAME</el-button>
       </div>
