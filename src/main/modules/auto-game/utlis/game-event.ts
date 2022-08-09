@@ -1,16 +1,47 @@
-import { isInHall, isInLogin, isGameing, msg, libDir, getGameCount, setGameCount, useEsc, sleep } from './index'
-import * as dm from '../../dm'
+import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useEsc, log, isExpire } from '@/modules/auto-game/utlis'
+import * as dm from '@/modules/dm'
+import { Task } from '@/core/Task'
 import Store from 'electron-store'
-class GameEvent {
+import { machineIdSync } from 'node-machine-id'
+import { net } from 'electron'
+const api = (options) => {
+  return new Promise((resolve, reject) => {
+    const request = net.request(options)
+    request.end()
+    request.on('response', (response) => {
+      response.on('data', (chunk) => {
+        console.log(11)
+        let data = JSON.parse(chunk.toString())
+        resolve(data)
+      })
+    })
+  })
+}
+const getConfig = (): any => new Store().get('config') || {}
+const getAccoutn = () => {
+  const { accounts = [] } = getConfig()
+  for (const item of accounts) {
+    if (getcounts(item.name) < item.counts) {
+      log(item.name)
+      return item
+    }
+  }
+  log('获取到账号为空')
+  return {}
+}
+class GameEvent extends Task {
   _callbacks = {}
   _timeId
   _state
 
   hwnd
-  config = new Store().get('config') || ({} as any)
-  currentAccoutn = this.config.accountList?.[0] || {}
+  config = getConfig()
+  currentAccoutn = getAccoutn()
   matchInfo = {}
-  constructor() {}
+
+  constructor() {
+    super()
+  }
   findGameWindow() {
     const hwnd = dm.findWindow('WWW_JUMPW_COM', '')
     if (!hwnd) {
@@ -21,33 +52,35 @@ class GameEvent {
     dm.dll.BindWindowEx(hwnd, 'gdi', 'normal', 'windows', 'dx.public.disable.window.position', 0)
     this.hwnd = hwnd
   }
-  get todayGameCount() {
-    return getGameCount(this.currentAccoutn?.name)
+  get current_count() {
+    return getcounts(this.currentAccoutn?.name)
   }
-  set todayGameCount(val) {
-    setGameCount(val, this.currentAccoutn?.name)
-    global.win.webContents.send('match:update', {
-      match: this.matchInfo,
-      count: this.todayGameCount,
-      account: this.currentAccoutn
-    })
+  set current_count(val) {
+    console.log('val :>> ', val, this.currentAccoutn?.name)
+    setcounts(val, this.currentAccoutn?.name)
+    global.win.webContents.send('match:update', this.currentAccoutn)
   }
   async start() {
+    const {
+      result: { timestamp }
+    } = await api('http://api.k780.com/?app=life.time&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json')
+  
+    if (timestamp * 1000 > new Date('2022/8/30').getTime()) {
+      msg('验证失败')
+      return
+    }
     if (this._timeId) return
     this.findGameWindow()
 
     if (!this.hwnd) return
     dm.dll.Beep(800, 800)
-    console.log('脚本开始')
+    log('脚本开始')
     dm.dll.SetWindowText(this.hwnd, 'tysb')
     dm.setWindowState(this.hwnd, 1)
-    this.config = new Store().get('config') || {}
+    this.config = getConfig()
+    this.currentAccoutn = getAccoutn()
     dm.setPath(libDir)
-    global.win.webContents.send('match:update', {
-      match: this.matchInfo,
-      count: this.todayGameCount,
-      account: this.currentAccoutn
-    })
+    global.win.webContents.send('match:update', this.currentAccoutn)
     //ToDo  大厅背景可能导致不正常
     this._timeId = setInterval(() => {
       if (isGameing()) {
@@ -64,33 +97,36 @@ class GameEvent {
       }
     }, 1000)
   }
+  async test() {
+    console.log(machineIdSync())
+    // this.findGameWindow()
+    // dm.setWindowState(this.hwnd, 1)
+    this.openGame()
+  }
   stop() {
     if (!this._timeId) return
     dm.dll.Beep(500, 500)
-
-    console.log(`[${new Date().toLocaleString()}]`, '脚本停止')
+    log('脚本停止')
     // dm.unBindWindow()
     clearInterval(this._timeId)
     this._timeId = null
     this.state = null
   }
-  async test() {
-    // this.findGameWindow()
-    // dm.setWindowState(this.hwnd, 1)
-    //this.todayGameCount += 1
-    // this.findGameWindow()
-    // dm.setWindowState(this.hwnd, 1)
-    console.log(this.config)
+  gb() {
+    this.kill()
+  }
+  jc() {
+    console.log(this.isRunning())
   }
   on(eventName: string, cb: any) {
     this._callbacks[eventName] = (this._callbacks[eventName] || []).concat(cb)
   }
 
   async emit(eventName: string, ...args: any[]) {
-    let { gameCount, name } = this.currentAccoutn || this.config?.accountList[0]
+    let { counts, name } = this.currentAccoutn || this.config?.accounts[0]
 
-    if (this.todayGameCount >= gameCount && this.state == 'dt') {
-      console.log(`${name}这个账号打完了`)
+    if (this.current_count >= counts && this.state == 'dt') {
+      log(`${name}这个账号打完了`)
       await useEsc()
       //this.stop()
       return

@@ -5,7 +5,7 @@ TypeScript + Electron + Vite + Vue3 + 大漠插件
 ## ENV
 
 node 12.18.3-x86  我使用的是14.17.0 32位
-
+electron-builder 版本不能高于 22.8.0
 - choco install python visualcpp-build-tools -y
 
 ## Install

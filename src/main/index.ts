@@ -1,42 +1,57 @@
 import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join, resolve } from 'path'
 import is_dev from 'electron-is-dev'
-
+import schedule from 'node-schedule'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
-import { useMenu } from './modules/menu'
-import { useTray } from './modules/tray'
-import AutoUpdate from './modules/autoUpdate'
-import { useGlobalShortcut } from './modules/globalShortcut'
-import game from './modules/auto-game'
-import { getGameCount } from './modules/auto-game/utlis'
-console.log(is_dev ? '开发模式' : '生产模式', __dirname)
-if (!is_dev) {
-  new AutoUpdate()
+import { useMenu } from '@/modules/menu'
+import { useTray } from '@/modules/tray'
+import AutoUpdate from '@/modules/autoUpdate'
+import { useGlobalShortcut } from '@/modules/globalShortcut'
+import game from '@/modules/auto-game'
+import { getcounts, isExpire } from '@/modules/auto-game/utlis'
+
+!is_dev && new AutoUpdate()
+
+const job = schedule.scheduleJob('9 * * * *', function (firDate) {
+  console.log('The answer to life, the universe, and everything!' + firDate)
+})
+const getPublicFile = (is_dev: boolean, file: string): string => {
+  return is_dev ? resolve(__dirname, `../../src/render/public/${file}`) : resolve(__dirname, `../render/public/${file}`)
 }
-export const icoPath = is_dev ? join(__dirname, '../../src/render/public/1.ico') : join(__dirname, '../render/1.ico')
+export const icoPath = getPublicFile(is_dev, '1.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
 ipcMain.on('onWindow', (e, state) => {
-  switch (state) {
-    case 'start':
-      game.start()
-      break
-    case 'stop':
-      game.stop()
-      break
-    default:
-      game.test()
-      break
-  }
+  game[state] && game[state]()
+  // switch (state) {
+  //   case 'start':
+  //     game.start()
+  //     break
+  //   case 'stop':
+  //     game.stop()
+  //     break
+  //   default:
+  //     game.test()
+  //     break
+  // }
 })
 const store = new Store()
-
 ipcMain.on('store:set', async (e, { key, value }) => {
   store.set(key, value)
 })
 ipcMain.on('store:get', (e, name) => {
-  if (name == 'gameCount') {
-    e.returnValue = getGameCount(game.currentAccoutn.name)
+  if (name == 'counts') {
+    e.returnValue = getcounts(game.currentAccoutn.name)
+    return
+  }
+  if (name == 'config') {
+    const config: any = store.get(name)
+    config.accounts?.forEach((account) => {
+      if (isExpire(account.expire)) {
+        account.current_count = 0
+      }
+    })
+    e.returnValue = config
     return
   }
   e.returnValue = store.get(name)
@@ -47,7 +62,7 @@ ipcMain.on('store:get', (e, name) => {
 ipcMain.on('store:delete', async (e, args) => {
   store.delete(args)
 })
-let win
+let win: BrowserWindow
 function createWindow() {
   win = new BrowserWindow({
     width: is_dev ? 1440 : 1280,
@@ -57,8 +72,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true,
-      preload: is_dev ? resolve(__dirname, '../../src/render/public/preload.js') : resolve(__dirname, '../render/preload.js')
+      preload: getPublicFile(is_dev, 'preload.js')
     }
   })
   const URL = is_dev
@@ -68,7 +82,7 @@ function createWindow() {
   is_dev && win.webContents.openDevTools()
   useTray(win)
   useGlobalShortcut(win)
-  useMenu(win)
+  !is_dev && useMenu()
   // win.on('minimize', () => {
   //   win.hide()
   // })
