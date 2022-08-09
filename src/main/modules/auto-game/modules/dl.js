@@ -1,18 +1,18 @@
-import * as dm from '../../dm'
-import XY from '../utlis/xy'
-import { sleep, msg, getGameCount } from '../utlis'
+import * as dm from '@/modules/dm'
+import XY from '@/modules/auto-game/utlis/xy'
+import { sleep, msg, getcounts } from '@/modules/auto-game/utlis'
 export async function useLogin(hwnd) {
   console.log('登陆界面', hwnd)
   // if (!this.config.qs.reconnect) {
   //   return
   // }
 
-  const { accountList } = this.config
+  const { accounts } = this.config
 
-  for (const i in accountList) {
-    let account = accountList[i]
-    let { gameCount = 0, name, password } = account
-    if (getGameCount(name) < gameCount) {
+  for (const i in accounts) {
+    let account = accounts[i]
+    let { counts = 0, name, password } = account
+    if (getcounts(name) < counts) {
       console.log(`登陆账号---> ${name}`)
       this.currentAccoutn = account
       //输入账号
@@ -35,7 +35,7 @@ export async function useLogin(hwnd) {
 
       return
     }
-    if (i == accountList.length - 1) {
+    if (i == accounts.length - 1) {
       msg('今日游戏次数已用完')
       this.stop()
     }

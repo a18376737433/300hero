@@ -1,8 +1,7 @@
-import * as dm from '../../dm'
-import XY from '../utlis/xy'
-import KEY from '../utlis/key'
-import { isBan, sleep, leftClick, checkedRole, isCheckedRole, isInHall } from '../utlis'
-
+import XY from '@/modules/auto-game/utlis/xy'
+import KEY from '@/modules/auto-game/utlis/key'
+import * as dm from '@/modules/dm'
+import { isBan, sleep, leftClick, checkedRole, isCheckedRole, isInHall } from '@/modules/auto-game/utlis'
 const _entry = [
   XY.play,
   XY.zc,
@@ -13,7 +12,7 @@ const _entry = [
   // XY.xlc_dryx
 ]
 export async function useHall(hwnd) {
-  const { role: _role, randomRole } = Object.assign(this.config.qs, this.currentAccoutn)
+  const { role: _role, randomRole } = Object.assign(this?.config?.qs, this.currentAccoutn)
   const { mode = 'zc' } = this.config
   console.log('大厅界面')
   await sleep(2000)
@@ -38,6 +37,11 @@ export async function useHall(hwnd) {
     leftClick(...XY['play'].xy)
     leftClick(184, 498)
     leftClick(645, 674)
+  }
+  if (mode == 'sz') {
+    leftClick(...XY['play'].xy)
+    leftClick(...XY['zc'].xy)
+    leftClick(566, 647) //神战 zc  世界战场
   }
   // for (const { xy, desc, delay = 100 } of _entry) {
   //   leftClick(...xy)
@@ -66,5 +70,5 @@ export async function useHall(hwnd) {
     }
   }
 
-  isInHall() && useHall(hwnd)
+  isInHall() && this.state && useHall.call(this, hwnd)
 }

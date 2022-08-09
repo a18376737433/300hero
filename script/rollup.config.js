@@ -4,6 +4,7 @@ const commonjs = require('@rollup/plugin-commonjs')
 const esbuild = require('rollup-plugin-esbuild')
 const alias = require('@rollup/plugin-alias')
 const json = require('@rollup/plugin-json')
+const fg = require('fast-glob')
 
 module.exports = (env = 'production') => {
   return {
@@ -24,7 +25,7 @@ module.exports = (env = 'production') => {
         exclude: /node_modules/, // default
         // watch: process.argv.includes('--watch'), // rollup 中有配置
         sourceMap: false, // default
-        minify: process.env.NODE_ENV === 'production',
+        minify: env === 'production',
         target: 'es2017', // default, or 'es20XX', 'esnext'
         jsxFactory: 'React.createElement',
         jsxFragment: 'React.Fragment',
@@ -44,13 +45,24 @@ module.exports = (env = 'production') => {
       alias({
         entries: [
           {
-            find: '@',
-            replacement: () => {
-              return path.resolve(__dirname, '../src')
+            find: /^@\/(.*)/,
+            replacement: (_, name) => {
+              const root = path.resolve(__dirname, '../src/main')
+              const files = fg.sync([`${name}.*`, `${name}/index.*`], { cwd: root })
+              if (!files.length) return name
+              return path.resolve(root, files[0])
             }
-            // path.join(__dirname, "../src/main")
           }
         ]
+        // entries: [
+        //   { find: /^@\/(.*)/, replacement: '$1.alias' },
+        //   {
+        //     find: '@',
+        //     replacement: path.join(__dirname, '../src/main')
+
+        //     // OR place `customResolver` here. See explanation below.
+        //   }
+        // ]
       })
     ],
     external: ['crypto', 'assert', 'fs', 'util', 'os', 'events', 'child_process', 'http', 'https', 'path', 'electron']

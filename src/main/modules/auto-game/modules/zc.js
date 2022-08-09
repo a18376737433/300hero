@@ -1,7 +1,7 @@
-import * as dm from '../../dm'
-import XY from '../utlis/xy'
-import KEY from '../utlis/key'
-import { setGameCount, isBan, sleep, leftClick, checkedRole, isCheckedRole, isGameing, useSmallScreen, useLock, rightClick, isRed, isCdOk, useSkill, KN_R, useProp, isGameEnd, isEmptyMP, isDie, useClickLike, useEye, useEsc } from '../utlis'
+import * as dm from '@/modules/dm'
+import XY from '@/modules/auto-game/utlis/xy'
+import KEY from '@/modules/auto-game/utlis/key'
+import { setcounts, isBan, sleep, leftClick, checkedRole, isCheckedRole, isGameing, useSmallScreen, useLock, rightClick, isRed, isCdOk, useSkill, KN_R, useProp, isGameEnd, isEmptyMP, isDie, useClickLike, useEye, useEsc } from '@/modules/auto-game/utlis'
 //Match
 const transformState = (state) => {
   const stateMap = {
@@ -84,14 +84,14 @@ export async function useZc(hwnd) {
     if (isGameEnd() && isZC()) {
       console.log('结束退出')
       dm.keyPress(KEY['enter'])
-      this.todayGameCount += 1
+      this.current_count += 1
       return
     }
 
     if (qsOption.dieQuit && isDie() && isZC()) {
       console.log('死亡退出')
       await useEsc()
-      this.todayGameCount += 1
+      this.current_count += 1
       return
     }
   }

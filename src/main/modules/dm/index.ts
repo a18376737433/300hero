@@ -1,10 +1,89 @@
-import { execFileSync, execSync } from 'child_process'
+import { execSync } from 'child_process'
 import { resolve, join } from 'path'
 import isDevelop from 'electron-is-dev'
+export interface Coordinate {
+  x: number
+  y: number
+}
+
+export interface FindRet extends Coordinate {
+  index: number
+}
+
+export interface OcrRet extends Coordinate {
+  words: string
+}
+
+export interface Area {
+  x1: number
+  y1: number
+  x2: number
+  y2: number
+}
+
+export interface Size {
+  width: number
+  height: number
+}
+
+export const enum DmRet {
+  Failed,
+  Success
+}
+
+export const enum FindDir {
+  LeftToRightAndTopToBottom,
+  LeftToRightAndBottomToTop,
+  RightToLeftAndTopToBottom,
+  RightToLeftAndBottomToTop,
+  CenterToOutSide,
+  TopToBottomAndLeftToRight,
+  TopToBottomAndRightToLeft,
+  BottomToTopAndLeftToRight,
+  BottomToTopAndRightToLeft
+}
+
+export const enum ErrorDisplay {
+  Hidden,
+  Show
+}
+
+export const enum GetWindowFlag {
+  Parent,
+  FirstChild,
+  First,
+  Last,
+  Next,
+  Previous,
+  Owner,
+  Top
+}
+
+export const enum WindowState {
+  Close,
+  Active,
+  MinimizeAndInactive,
+  MinimizeAndReleaseMemoryAndActive,
+  MaximizeAndActive,
+  RestoreAndInactive,
+  Hide,
+  Show,
+  Top,
+  CancelTop,
+  Disable,
+  CancelDisable,
+  RestoreAndActive,
+  ForceExit
+}
+
+export const enum KeyState {
+  Up,
+  Down
+}
+
 const libDir = join(__dirname, isDevelop ? '../../src/main/library' : '../../../library')
 
 const winax = require('winax')
-import { Coordinate, DmRet, ErrorDisplay, FindDir, FindRet, GetWindowFlag, KeyState, OcrRet, Size, WindowState } from './types'
 type DisplayType = 'normal' | 'gdi' | 'gdi2' | 'dx' | 'dx2' | 'dx3'
 type MouseType = 'normal' | 'windows' | 'windows2' | 'windows3' | 'dx' | 'dx2'
 type KeypadType = 'normal' | 'windows' | 'dx'
