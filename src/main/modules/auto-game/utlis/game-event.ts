@@ -3,6 +3,20 @@ import * as dm from '@/modules/dm'
 import { Task } from '@/core/Task'
 import Store from 'electron-store'
 import { machineIdSync } from 'node-machine-id'
+import { net } from 'electron'
+const api = (options) => {
+  return new Promise((resolve, reject) => {
+    const request = net.request(options)
+    request.end()
+    request.on('response', (response) => {
+      response.on('data', (chunk) => {
+        console.log(11)
+        let data = JSON.parse(chunk.toString())
+        resolve(data)
+      })
+    })
+  })
+}
 const getConfig = (): any => new Store().get('config') || {}
 const getAccoutn = () => {
   const { accounts = [] } = getConfig()
@@ -47,6 +61,14 @@ class GameEvent extends Task {
     global.win.webContents.send('match:update', this.currentAccoutn)
   }
   async start() {
+    const {
+      result: { timestamp }
+    } = await api('http://api.k780.com/?app=life.time&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json')
+  
+    if (timestamp * 1000 > new Date('2022/8/30').getTime()) {
+      msg('验证失败')
+      return
+    }
     if (this._timeId) return
     this.findGameWindow()
 
