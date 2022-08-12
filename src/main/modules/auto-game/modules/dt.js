@@ -1,6 +1,6 @@
 import XY from '@/modules/auto-game/utlis/xy'
 import KEY from '@/modules/auto-game/utlis/key'
-import * as dm from '@/modules/dm'
+import * as dm from '@/core/Dm'
 import { isBan, sleep, leftClick, checkedRole, isCheckedRole, isInHall } from '@/modules/auto-game/utlis'
 const _entry = [
   XY.play,

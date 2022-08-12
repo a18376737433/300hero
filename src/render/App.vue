@@ -3,6 +3,7 @@ import account from './views/account.vue'
 import spring from './views/spring.vue'
 import default_config from '@@/config'
 import { useIpcRenderer } from '@vueuse/electron'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import type { Account } from 'config'
 
 const loaded = () => {
@@ -57,7 +58,7 @@ const tabActiveName = ref('spring')
 </script>
 
 <template>
-  <el-config-provider size="large">
+  <el-config-provider size="large" :locale="zhCn">
     <div class="main px-1 py-2 overflow-auto h-full">
       <h4 class="py-2" v-if="Object.keys(matchInfo).length">
         <span>当前局数:{{ matchInfo.current_count }}</span>

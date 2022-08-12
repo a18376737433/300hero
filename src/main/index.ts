@@ -4,16 +4,14 @@ import is_dev from 'electron-is-dev'
 import schedule from 'node-schedule'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
-import { useMenu } from '@/modules/menu'
-import { useTray } from '@/modules/tray'
-import AutoUpdate from '@/modules/autoUpdate'
-import { useGlobalShortcut } from '@/modules/globalShortcut'
+import { useMenu } from '@/core/Menu'
+import { useTray } from '@/core/Tray'
+import { useAppUpdater } from '@/core/AutoUpdate'
+import { useGlobalShortcut } from '@/core/GlobalShortcut'
 import game from '@/modules/auto-game'
 import { getcounts, isExpire } from '@/modules/auto-game/utlis'
 
-!is_dev && new AutoUpdate()
-
-const job = schedule.scheduleJob('9 * * * *', function (firDate) {
+const job = schedule.scheduleJob('0 0 * * *', function (firDate) {
   console.log('The answer to life, the universe, and everything!' + firDate)
 })
 const getPublicFile = (is_dev: boolean, file: string): string => {
@@ -21,6 +19,12 @@ const getPublicFile = (is_dev: boolean, file: string): string => {
 }
 export const icoPath = getPublicFile(is_dev, '1.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
+
+ipcMain.on('updateJob', (event, arg) => {
+  job.cancel()
+  job.reschedule(arg)
+})
+
 ipcMain.on('onWindow', (e, state) => {
   game[state] && game[state]()
   // switch (state) {
@@ -80,12 +84,10 @@ function createWindow() {
     : `file://${join(__dirname, '../../dist/render/index.html')}` // vite 构建后的静态文件地址
   win.loadURL(URL)
   is_dev && win.webContents.openDevTools()
+  useAppUpdater()
   useTray(win)
   useGlobalShortcut(win)
-  is_dev && useMenu()
-  // win.on('minimize', () => {
-  //   win.hide()
-  // })
+  useMenu()
 }
 
 app.whenReady().then(() => {

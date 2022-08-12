@@ -1,4 +1,4 @@
-import * as dm from '@/modules/dm'
+import * as dm from '@/core/Dm'
 import XY from '@/modules/auto-game/utlis/xy'
 import { sleep, msg, getcounts } from '@/modules/auto-game/utlis'
 export async function useLogin(hwnd) {

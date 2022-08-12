@@ -151,6 +151,7 @@ const handleExceed = ({ status, raw }) => {
   <el-upload accept=".exe" :show-file-list="false" :limit="1" :auto-upload="false" :on-change="handleExceed">
     <el-button plain>{{ config.path || '选择启动路径' }}</el-button>
   </el-upload>
+  <el-time-picker v-model="config.jobTime" format="HH:mm" :editable="false" placeholder="定时启动" />
 </template>
 
 <style lang="scss" scoped>

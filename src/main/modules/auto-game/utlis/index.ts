@@ -1,4 +1,4 @@
-import * as dm from '@/modules/dm'
+import * as dm from '@/core/Dm'
 import XY from '@/modules/auto-game/utlis/xy'
 import KEY from '@/modules/auto-game/utlis/key'
 import { resolve, join } from 'path'

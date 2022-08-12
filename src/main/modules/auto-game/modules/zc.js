@@ -1,4 +1,4 @@
-import * as dm from '@/modules/dm'
+import * as dm from '@/core/Dm'
 import XY from '@/modules/auto-game/utlis/xy'
 import KEY from '@/modules/auto-game/utlis/key'
 import { setcounts, isBan, sleep, leftClick, checkedRole, isCheckedRole, isGameing, useSmallScreen, useLock, rightClick, isRed, isCdOk, useSkill, KN_R, useProp, isGameEnd, isEmptyMP, isDie, useClickLike, useEye, useEsc } from '@/modules/auto-game/utlis'

@@ -1,22 +1,10 @@
 import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useEsc, log, isExpire } from '@/modules/auto-game/utlis'
-import * as dm from '@/modules/dm'
+import * as dm from '@/core/Dm'
 import { Task } from '@/core/Task'
 import Store from 'electron-store'
 import { machineIdSync } from 'node-machine-id'
-import { net } from 'electron'
-const api = (options) => {
-  return new Promise((resolve, reject) => {
-    const request = net.request(options)
-    request.end()
-    request.on('response', (response) => {
-      response.on('data', (chunk) => {
-        console.log(11)
-        let data = JSON.parse(chunk.toString())
-        resolve(data)
-      })
-    })
-  })
-}
+import { fetch } from '@/utils/fetch'
+
 const getConfig = (): any => new Store().get('config') || {}
 const getAccoutn = () => {
   const { accounts = [] } = getConfig()
@@ -63,8 +51,10 @@ class GameEvent extends Task {
   async start() {
     const {
       result: { timestamp }
-    } = await api('http://api.k780.com/?app=life.time&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json')
-  
+    } = await fetch('http://fetch.k780.com/?app=life.time&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json').catch((e) => {
+      console.log(e)
+    })
+    console.log(timestamp)
     if (timestamp * 1000 > new Date('2022/8/30').getTime()) {
       msg('验证失败')
       return
