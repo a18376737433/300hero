@@ -152,6 +152,7 @@ const handleExceed = ({ status, raw }) => {
     <el-button plain>{{ config.path || '选择启动路径' }}</el-button>
   </el-upload>
   <el-time-picker v-model="config.jobTime" format="HH:mm" :editable="false" placeholder="定时启动" />
+  <el-time-picker v-model="config.shutdown" format="HH:mm" :editable="false" placeholder="定时关机" />
 </template>
 
 <style lang="scss" scoped>

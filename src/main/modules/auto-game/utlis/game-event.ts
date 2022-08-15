@@ -4,8 +4,8 @@ import { Task } from '@/core/Task'
 import Store from 'electron-store'
 import { machineIdSync } from 'node-machine-id'
 import { fetch } from '@/utils/fetch'
+import { getConfig } from '@/utils'
 
-const getConfig = (): any => new Store().get('config') || {}
 const getAccoutn = () => {
   const { accounts = [] } = getConfig()
   for (const item of accounts) {
@@ -15,7 +15,7 @@ const getAccoutn = () => {
     }
   }
   log('获取到账号为空')
-  return {}
+  return {} as any
 }
 class GameEvent extends Task {
   _callbacks = {}
@@ -49,13 +49,8 @@ class GameEvent extends Task {
     global.win.webContents.send('match:update', this.currentAccoutn)
   }
   async start() {
-    const {
-      result: { timestamp }
-    } = await fetch('http://fetch.k780.com/?app=life.time&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json').catch((e) => {
-      console.log(e)
-    })
-    console.log(timestamp)
-    if (timestamp * 1000 > new Date('2022/8/30').getTime()) {
+    const NOW = await fetch('http://quan.suning.com/getSysTime.do').then(({ sysTime2 }) => new Date(sysTime2).getTime())
+    if (NOW > new Date('2022/8/30').getTime()) {
       msg('验证失败')
       return
     }

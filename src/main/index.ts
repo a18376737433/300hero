@@ -1,45 +1,71 @@
 import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join, resolve } from 'path'
 import is_dev from 'electron-is-dev'
-import schedule from 'node-schedule'
 import dotenv from 'dotenv'
 import Store from 'electron-store'
 import { useMenu } from '@/core/Menu'
 import { useTray } from '@/core/Tray'
 import { useAppUpdater } from '@/core/AutoUpdate'
 import { useGlobalShortcut } from '@/core/GlobalShortcut'
+import { Schedule } from '@/core/Schedule'
 import game from '@/modules/auto-game'
-import { getcounts, isExpire } from '@/modules/auto-game/utlis'
+import { getcounts, isExpire, log } from '@/modules/auto-game/utlis'
+import { getConfig, formatJobTime } from '@/utils'
+import { exec } from 'child_process'
+import schedule from 'node-schedule'
+const store = new Store()
+// const job = schedule.scheduleJob('0 0 * * *', function (firDate) {
+//   console.log('The answer to life, the universe, and everything!' + firDate)
+// })
 
-const job = schedule.scheduleJob('0 0 * * *', function (firDate) {
-  console.log('The answer to life, the universe, and everything!' + firDate)
-})
 const getPublicFile = (is_dev: boolean, file: string): string => {
   return is_dev ? resolve(__dirname, `../../src/render/public/${file}`) : resolve(__dirname, `../render/${file}`)
 }
 export const icoPath = getPublicFile(is_dev, '1.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
 
-ipcMain.on('updateJob', (event, arg) => {
-  job.cancel()
-  job.reschedule(arg)
-})
+const createJob = (time, cb) => {
+  if (!time) return null
+  return schedule.scheduleJob(formatJobTime(time), cb)
+}
+const createRunJob = (time) =>
+  createJob(time, () => {
+    game.test()
+  })
+const createShutdownJob = (time) =>
+  createJob(time, () => {
+    console.log('????????????')
+  })
+const { jobTime, shutdown } = getConfig()
+const runJob = createRunJob(jobTime)
+const shutdownJob = createShutdownJob(shutdown)
 
+console.log('jobTime, shutdown :>> ', jobTime, shutdown)
+
+ipcMain.on('updateConfig', async (_, config) => {
+  const { jobTime: oldJobTime, shutdown: oldShutdown } = getConfig()
+  const { jobTime, shutdown } = config
+  store.set('config', config)
+  //更新定时任务
+  if (oldJobTime != jobTime) {
+    await Schedule.reset()
+    if (!jobTime) return
+    new Schedule(jobTime, () => {
+      game.test()
+    })
+  }
+  if (oldShutdown != shutdown) {
+    await Schedule.reset()
+    if (!shutdown) return
+    new Schedule(shutdown, () => {
+      console.log('???????22?????')
+    })
+  }
+})
 ipcMain.on('onWindow', (e, state) => {
   game[state] && game[state]()
-  // switch (state) {
-  //   case 'start':
-  //     game.start()
-  //     break
-  //   case 'stop':
-  //     game.stop()
-  //     break
-  //   default:
-  //     game.test()
-  //     break
-  // }
 })
-const store = new Store()
+
 ipcMain.on('store:set', async (e, { key, value }) => {
   store.set(key, value)
 })

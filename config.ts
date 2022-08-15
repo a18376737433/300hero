@@ -38,6 +38,8 @@ export interface Config {
   path: string
   accounts: Account[]
   qs: QsOptions
+  jobTime?: Date
+  shutdown?: Date
 }
 export default <Config>{
   accounts: [],

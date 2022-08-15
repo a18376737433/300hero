@@ -2,7 +2,7 @@ import { execSync, exec } from 'child_process'
 import { log } from '../modules/auto-game/utlis/index'
 import url from 'url'
 import Store from 'electron-store'
-const getConfig = (): any => new Store().get('config') || {}
+import { getConfig } from '@/utils'
 export class Task {
   constructor() {}
   
