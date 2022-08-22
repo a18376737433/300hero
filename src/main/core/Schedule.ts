@@ -1,15 +1,49 @@
 import schedule from 'node-schedule'
 import { log } from '@/modules/auto-game/utlis'
+import { getConfig, formatJobTime } from '@/utils'
+import game from '@/modules/auto-game'
+
+const createJob = (time, cb) => {
+  if (!time) return null
+  return schedule.scheduleJob(formatJobTime(time), cb)
+}
+const createRunJob = (time) =>
+  createJob(time, () => {
+    game.test()
+  })
+const createShutdownJob = (time) =>
+  createJob(time, () => {
+    console.log('????????????')
+  })
 export class Schedule {
-  constructor(time: any, cb: Function) {
-    schedule.scheduleJob(this.formatTime(time), cb)
+  runJob: any
+  shutdownJob: any
+  obj: any = {}
+  constructor() {
+    this.init()
   }
-  formatTime(time: any) {
-    log('开启定时任务', new Date(time).toLocaleTimeString().slice(0, 5))
-    const [minute, hour] = new Date(time).toLocaleTimeString().slice(0, 5).split(':').map(Number).reverse()
-    return `${minute} ${hour} * * *`
+  init() {
+    const { jobTime, shutdown } = getConfig()
+    if (jobTime) {
+      this.runJob = createRunJob(jobTime)
+    }
+    if (shutdown) {
+      this.shutdownJob = createShutdownJob(shutdown)
+    }
+    console.log(jobTime, shutdown)
   }
-  static async reset() {
-    await schedule.gracefulShutdown()
+  update([oldJobTime, oldShutdown]) {
+    const { jobTime, shutdown } = getConfig()
+    if (oldJobTime !== jobTime) {
+      log('更新定时任务 定时启动',)
+      this.runJob.cancel()
+      this.runJob = createRunJob(jobTime)
+    }
+
+    if (oldShutdown !== shutdown) {
+      log('更新定时任务 自动关机',)
+      this.shutdownJob.cancel()
+      this.shutdownJob = createShutdownJob(shutdown)
+    }
   }
 }

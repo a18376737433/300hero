@@ -37,7 +37,7 @@ export interface Config {
   mode: string
   path: string
   accounts: Account[]
-  qs: QsOptions
+  qs: QsOptions,
   jobTime?: Date
   shutdown?: Date
 }

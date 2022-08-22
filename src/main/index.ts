@@ -9,58 +9,24 @@ import { useAppUpdater } from '@/core/AutoUpdate'
 import { useGlobalShortcut } from '@/core/GlobalShortcut'
 import { Schedule } from '@/core/Schedule'
 import game from '@/modules/auto-game'
-import { getcounts, isExpire, log } from '@/modules/auto-game/utlis'
+import { getcounts, isExpire, log, msg } from '@/modules/auto-game/utlis'
 import { getConfig, formatJobTime } from '@/utils'
-import { exec } from 'child_process'
-import schedule from 'node-schedule'
+
+const job = new Schedule()//定时任务
 const store = new Store()
-// const job = schedule.scheduleJob('0 0 * * *', function (firDate) {
-//   console.log('The answer to life, the universe, and everything!' + firDate)
-// })
 
 const getPublicFile = (is_dev: boolean, file: string): string => {
-  return is_dev ? resolve(__dirname, `../../src/render/public/${file}`) : resolve(__dirname, `../render/${file}`)
+  const path = is_dev ? `../../src/render/public/${file}` : `../render/${file}`
+  return resolve(__dirname, path)
 }
-export const icoPath = getPublicFile(is_dev, '1.ico')
+export const icoPath = getPublicFile(is_dev, 'trayIcon.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
-
-const createJob = (time, cb) => {
-  if (!time) return null
-  return schedule.scheduleJob(formatJobTime(time), cb)
-}
-const createRunJob = (time) =>
-  createJob(time, () => {
-    game.test()
-  })
-const createShutdownJob = (time) =>
-  createJob(time, () => {
-    console.log('????????????')
-  })
-const { jobTime, shutdown } = getConfig()
-const runJob = createRunJob(jobTime)
-const shutdownJob = createShutdownJob(shutdown)
-
-console.log('jobTime, shutdown :>> ', jobTime, shutdown)
 
 ipcMain.on('updateConfig', async (_, config) => {
   const { jobTime: oldJobTime, shutdown: oldShutdown } = getConfig()
-  const { jobTime, shutdown } = config
   store.set('config', config)
   //更新定时任务
-  if (oldJobTime != jobTime) {
-    await Schedule.reset()
-    if (!jobTime) return
-    new Schedule(jobTime, () => {
-      game.test()
-    })
-  }
-  if (oldShutdown != shutdown) {
-    await Schedule.reset()
-    if (!shutdown) return
-    new Schedule(shutdown, () => {
-      console.log('???????22?????')
-    })
-  }
+  job.update([oldJobTime,oldShutdown])
 })
 ipcMain.on('onWindow', (e, state) => {
   game[state] && game[state]()
@@ -117,6 +83,12 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  //禁止重复运行
+  if (!app.requestSingleInstanceLock()) {
+    msg('已经打开过一个了', '重复运行')
+    app.quit()
+  }
+
   createWindow()
   global.win = win
   app.on('activate', function () {
