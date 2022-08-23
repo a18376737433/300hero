@@ -11,9 +11,15 @@ import { Schedule } from '@/core/Schedule'
 import game from '@/modules/auto-game'
 import { getcounts, isExpire, log, msg } from '@/modules/auto-game/utlis'
 import { getConfig, formatJobTime } from '@/utils'
+import defaultConfig, { Config } from '../../config'
 
-const job = new Schedule()//定时任务
-const store = new Store()
+const job = new Schedule() //定时任务
+const store = new Store({
+  cwd: __dirname,
+  defaults: {
+    config: defaultConfig
+  }
+})
 
 const getPublicFile = (is_dev: boolean, file: string): string => {
   const path = is_dev ? `../../src/render/public/${file}` : `../render/${file}`
@@ -26,7 +32,7 @@ ipcMain.on('updateConfig', async (_, config) => {
   const { jobTime: oldJobTime, shutdown: oldShutdown } = getConfig()
   store.set('config', config)
   //更新定时任务
-  job.update([oldJobTime,oldShutdown])
+  job.update([oldJobTime, oldShutdown])
 })
 ipcMain.on('onWindow', (e, state) => {
   game[state] && game[state]()
@@ -41,9 +47,9 @@ ipcMain.on('store:get', (e, name) => {
     return
   }
   if (name == 'config') {
-    const config: any = store.get(name)
+    const config = store.get(name) as Config
     config.accounts?.forEach((account) => {
-      if (isExpire(account.expire)) {
+      if (isExpire(account.expire!)) {
         account.current_count = 0
       }
     })
@@ -99,4 +105,4 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
-app.setAppUserModelId(app.getName() || '300hero')
+app.setAppUserModelId(app.getName() || '300英雄助手')

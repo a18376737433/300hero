@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import account from './views/account.vue'
 import spring from './views/spring.vue'
-import default_config from '@@/config'
+
 import { useIpcRenderer } from '@vueuse/electron'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
-import type { Account } from 'config'
+import type { Account, Config } from 'config'
+import { Ref } from 'vue'
 
 const loaded = () => {
   const appLoading = document.getElementById('apploading')
   if (appLoading) appLoading.style.display = 'none'
 }
 const { sendSync, send, on } = useIpcRenderer()
-const preConfig = sendSync('store:get', 'config')
-const config = reactive(Object.assign({}, default_config, preConfig.value))
-
+const config = sendSync('store:get', 'config') as Ref<Config>
 console.log('用户配置', config)
 const debounce = (fn: Function, delay: number = 3000) => {
   let timer: any
