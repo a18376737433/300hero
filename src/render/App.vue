@@ -15,7 +15,7 @@ const preConfig = sendSync('store:get', 'config')
 const config = reactive(Object.assign({}, default_config, preConfig.value))
 
 console.log('用户配置', config)
-const debounce = (fn: Function, delay: number = 1000) => {
+const debounce = (fn: Function, delay: number = 3000) => {
   let timer: any
   return (...args: any[]) => {
     timer && clearTimeout(timer)
@@ -29,25 +29,11 @@ loaded()
 const setConfig = debounce(() => {
   console.log('更改配置')
   send('updateConfig', JSON.parse(JSON.stringify(config)))
-  // send('store:set', {
-  //   key: 'config',
-  //   value: JSON.parse(JSON.stringify(config))
-  // })
 })
-const updateJob = debounce(() => {
-  console.log(config.jobTime)
-  send('updateJob', config.jobTime)
-}, 3000)
 
 watch(config, () => {
   setConfig()
 })
-watch(
-  () => config.jobTime,
-  () => {
-    updateJob()
-  }
-)
 
 //监听main的快捷键事件
 on('shortcut_key', (e, { key }) => {

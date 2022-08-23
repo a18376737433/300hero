@@ -18,11 +18,10 @@ const createShutdownJob = (time) =>
 export class Schedule {
   runJob: any
   shutdownJob: any
-  obj: any = {}
   constructor() {
     this.init()
   }
-  init() {
+  private init() {
     const { jobTime, shutdown } = getConfig()
     if (jobTime) {
       this.runJob = createRunJob(jobTime)
@@ -30,20 +29,22 @@ export class Schedule {
     if (shutdown) {
       this.shutdownJob = createShutdownJob(shutdown)
     }
-    console.log(jobTime, shutdown)
   }
   update([oldJobTime, oldShutdown]) {
     const { jobTime, shutdown } = getConfig()
     if (oldJobTime !== jobTime) {
-      log('更新定时任务 定时启动',)
-      this.runJob.cancel()
+      this.log('启动', jobTime)
+      this.runJob?.cancel()
       this.runJob = createRunJob(jobTime)
     }
 
     if (oldShutdown !== shutdown) {
-      log('更新定时任务 自动关机',)
-      this.shutdownJob.cancel()
+      this.log('关机', shutdown)
+      this.shutdownJob?.cancel()
       this.shutdownJob = createShutdownJob(shutdown)
     }
+  }
+  private log(msg: string, time: any) {
+    log(`[更新定时任务] ${msg}`, new Date(time).toLocaleTimeString().slice(0, 5))
   }
 }

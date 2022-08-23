@@ -72,6 +72,9 @@ const handleExceed = ({ status, raw }) => {
   }
   config.path = raw.path
 }
+const handleTimePicker = (vl) => {
+  console.log(12121, vl)
+}
 </script>
 
 <template>
