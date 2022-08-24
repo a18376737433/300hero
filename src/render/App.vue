@@ -6,13 +6,13 @@ import { useIpcRenderer } from '@vueuse/electron'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import type { Account, Config } from 'config'
 import { Ref } from 'vue'
-
+const { sendSync, send, on } = useIpcRenderer()
 const loaded = () => {
   const appLoading = document.getElementById('apploading')
   if (appLoading) appLoading.style.display = 'none'
 }
-const { sendSync, send, on } = useIpcRenderer()
-const config = sendSync('store:get', 'config') as Ref<Config>
+
+const config = reactive(sendSync('getConfig').value as Ref<Config>)
 console.log('用户配置', config)
 const debounce = (fn: Function, delay: number = 3000) => {
   let timer: any
@@ -27,7 +27,7 @@ loaded()
 
 const setConfig = debounce(() => {
   console.log('更改配置')
-  send('updateConfig', JSON.parse(JSON.stringify(config)))
+  send('saveConfig', JSON.parse(JSON.stringify(config)))
 })
 
 watch(config, () => {
@@ -48,21 +48,17 @@ on('shortcut_key', (e, { key }) => {
       break
   }
 })
-
+// on('updateConfig',(_,newConfig)=>{
+//   config=reactive(newConfig)
+//   console.log(config);
+// })
 const matchInfo = ref<Account | any>({})
 
 on('match:update', (e, currentAccoutn) => {
+  console.log('战绩更新');
   matchInfo.value = currentAccoutn
 })
-const handleWindow = (state) => {
-  if (state === 'start') {
-    send('store:set', {
-      key: 'config',
-      value: JSON.parse(JSON.stringify(config))
-    })
-  }
-  send('onWindow', state)
-}
+const handleWindow = (state: string) => send('onWindow', state)
 
 const tabActiveName = ref('spring')
 </script>

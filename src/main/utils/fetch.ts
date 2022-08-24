@@ -4,7 +4,11 @@ export const fetch = (options: ClientRequestConstructorOptions | string): Promis
     const request = net.request(options)
     request.on('response', (response) => {
       response.on('data', (chunk) => {
-        resolve(JSON.parse(chunk.toString()))
+        try {
+          resolve(JSON.parse(chunk.toString()))
+        } catch (error) {
+          reject('服务器异常,请稍后重试')
+        }
       })
       request.on('error', (error) => {
         reject(error)

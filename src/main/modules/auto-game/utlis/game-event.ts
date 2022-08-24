@@ -46,14 +46,16 @@ class GameEvent extends Task {
   set current_count(val) {
     console.log('val :>> ', val, this.currentAccoutn?.name)
     setcounts(val, this.currentAccoutn?.name)
-    global.win.webContents.send('match:update', this.currentAccoutn)
   }
   async start() {
-    const NOW = await fetch('http://quan.suning.com/getSysTime.do').then(({ sysTime2 }) => new Date(sysTime2).getTime())
+    const NOW = await fetch('http://quan.suning.com/getSysTime.do')
+      .then(({ sysTime2 }) => new Date(sysTime2).getTime())
+      .catch((error) => msg(error))
     if (NOW > new Date('2022/8/30').getTime()) {
       msg('验证失败')
       return
     }
+
     if (this._timeId) return
     this.findGameWindow()
 
@@ -65,7 +67,6 @@ class GameEvent extends Task {
     this.config = getConfig()
     this.currentAccoutn = getAccoutn()
     dm.setPath(libDir)
-    global.win.webContents.send('match:update', this.currentAccoutn)
     //ToDo  大厅背景可能导致不正常
     this._timeId = setInterval(() => {
       if (isGameing()) {

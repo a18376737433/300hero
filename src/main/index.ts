@@ -2,24 +2,18 @@ import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join, resolve } from 'path'
 import is_dev from 'electron-is-dev'
 import dotenv from 'dotenv'
-import Store from 'electron-store'
-import { useMenu } from '@/core/Menu'
 import { useTray } from '@/core/Tray'
+import { useMenu } from '@/core/Menu'
+import store from '@/core/Store'
 import { useAppUpdater } from '@/core/AutoUpdate'
 import { useGlobalShortcut } from '@/core/GlobalShortcut'
 import { Schedule } from '@/core/Schedule'
 import game from '@/modules/auto-game'
 import { getcounts, isExpire, log, msg } from '@/modules/auto-game/utlis'
 import { getConfig, formatJobTime } from '@/utils'
-import defaultConfig, { Config } from '../../config'
+import { Config } from '../../config'
 
 const job = new Schedule() //定时任务
-const store = new Store({
-  cwd: __dirname,
-  defaults: {
-    config: defaultConfig
-  }
-})
 
 const getPublicFile = (is_dev: boolean, file: string): string => {
   const path = is_dev ? `../../src/render/public/${file}` : `../render/${file}`
@@ -28,7 +22,7 @@ const getPublicFile = (is_dev: boolean, file: string): string => {
 export const icoPath = getPublicFile(is_dev, 'trayIcon.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
 
-ipcMain.on('updateConfig', async (_, config) => {
+ipcMain.on('saveConfig', async (_, config) => {
   const { jobTime: oldJobTime, shutdown: oldShutdown } = getConfig()
   store.set('config', config)
   //更新定时任务
@@ -37,33 +31,16 @@ ipcMain.on('updateConfig', async (_, config) => {
 ipcMain.on('onWindow', (e, state) => {
   game[state] && game[state]()
 })
+ipcMain.on('getConfig', (e) => {
+  const config = store.get('config') as Config
+  config?.accounts.forEach((item) => {
+    if (isExpire(item.expire!)) {
+      item.current_count = 0
+    }
+  })
+  e.returnValue = config
+})
 
-ipcMain.on('store:set', async (e, { key, value }) => {
-  store.set(key, value)
-})
-ipcMain.on('store:get', (e, name) => {
-  if (name == 'counts') {
-    e.returnValue = getcounts(game.currentAccoutn.name)
-    return
-  }
-  if (name == 'config') {
-    const config = store.get(name) as Config
-    config.accounts?.forEach((account) => {
-      if (isExpire(account.expire!)) {
-        account.current_count = 0
-      }
-    })
-    e.returnValue = config
-    return
-  }
-  e.returnValue = store.get(name)
-})
-// ipcMain.handle('store:get', (e, args) => {
-//   return store.get(args)
-// })
-ipcMain.on('store:delete', async (e, args) => {
-  store.delete(args)
-})
 let win: BrowserWindow
 function createWindow() {
   win = new BrowserWindow({
@@ -88,6 +65,7 @@ function createWindow() {
   useMenu()
 }
 
+const updateConfig = () => win.webContents.send('updateConfig', getConfig())
 app.whenReady().then(() => {
   //禁止重复运行
   if (!app.requestSingleInstanceLock()) {
@@ -99,6 +77,9 @@ app.whenReady().then(() => {
   global.win = win
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  })
+  app.on('browser-window-focus', () => {
+    updateConfig()
   })
 })
 
