@@ -1,13 +1,10 @@
 import { globalShortcut, BrowserWindow } from 'electron'
-import { msg } from '@/modules/auto-game/utlis'
+import game from '@/modules/auto-game'
 export const useGlobalShortcut = (win: BrowserWindow): void => {
-  const result1 = globalShortcut.register('f1', () => {
-    win.webContents.send('shortcut_key', { key: 'f1' })
+  globalShortcut.register('f1', () => {
+    game.start()
   })
-  const result2 = globalShortcut.register('f2', () => {
-    win.webContents.send('shortcut_key', { key: 'f2' })
+  globalShortcut.register('f2', () => {
+    game.stop()
   })
-  if (!result2) {
-    msg('快捷键被占用')
-  }
 }

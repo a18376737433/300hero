@@ -17,6 +17,7 @@ const pushAccountItem = () => {
     randomRole: false,
     current_count: 0
   })
+  console.log(accounts);
 }
 const removeAccountItem = (index: number) => {
   accounts.splice(index, 1)

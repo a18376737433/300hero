@@ -1,61 +1,41 @@
 <script setup lang="ts">
 import account from './views/account.vue'
 import spring from './views/spring.vue'
-
 import { useIpcRenderer } from '@vueuse/electron'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import type { Account, Config } from 'config'
 import { Ref } from 'vue'
+import { closeLoading } from '@/common'
+
 const { sendSync, send, on } = useIpcRenderer()
-const loaded = () => {
-  const appLoading = document.getElementById('apploading')
-  if (appLoading) appLoading.style.display = 'none'
-}
+closeLoading('apploading')
+const config = ref(sendSync('getConfig').value as Ref<Config>)
+console.log('用户配置', config.value)
 
-const config = reactive(sendSync('getConfig').value as Ref<Config>)
-console.log('用户配置', config)
-const debounce = (fn: Function, delay: number = 3000) => {
-  let timer: any
-  return (...args: any[]) => {
-    timer && clearTimeout(timer)
-    timer = setTimeout(() => {
-      fn(...args)
-    }, delay)
+const isUserEdit = ref<boolean>(true)
+
+watch(
+  config,
+  () => {
+    if (isUserEdit.value) {
+      send('saveConfig', JSON.parse(JSON.stringify(config.value)))
+    } else {
+      isUserEdit.value = true
+    }
+  },
+  {
+    deep: true
   }
-}
-loaded()
+)
 
-const setConfig = debounce(() => {
-  console.log('更改配置')
-  send('saveConfig', JSON.parse(JSON.stringify(config)))
+on('updateConfig', (_, val) => {
+  isUserEdit.value = false
+  config.value = val
 })
-
-watch(config, () => {
-  setConfig()
-})
-
-//监听main的快捷键事件
-on('shortcut_key', (e, { key }) => {
-  switch (key) {
-    case 'f1':
-      handleWindow('start')
-      break
-    case 'f2':
-      handleWindow('stop')
-      break
-    default:
-      console.log('未注册的键盘事件')
-      break
-  }
-})
-// on('updateConfig',(_,newConfig)=>{
-//   config=reactive(newConfig)
-//   console.log(config);
-// })
 const matchInfo = ref<Account | any>({})
 
 on('match:update', (e, currentAccoutn) => {
-  console.log('战绩更新');
+  console.log('战绩更新')
   matchInfo.value = currentAccoutn
 })
 const handleWindow = (state: string) => send('onWindow', state)

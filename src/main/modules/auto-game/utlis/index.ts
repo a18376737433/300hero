@@ -317,7 +317,6 @@ export const findStr = () => {
   console.log(dm.ocr(47, 363, 82, 391, '000000', 1))
 }
 export const msg = (body, title = '提示') => {
-  console.log('icoPath :>> ', icoPath);
   new Notification({
     title,
     body,

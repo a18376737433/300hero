@@ -30,6 +30,7 @@ export class Schedule {
       this.shutdownJob = createShutdownJob(shutdown)
     }
   }
+
   update([oldJobTime, oldShutdown]) {
     const { jobTime, shutdown } = getConfig()
     if (oldJobTime !== jobTime) {
