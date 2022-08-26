@@ -4,10 +4,10 @@ import KEY from '@/modules/auto-game/utlis/key'
 import { resolve, join } from 'path'
 import { Notification } from 'electron'
 import isDevelop from 'electron-is-dev'
-import Store from 'electron-store'
+import store from '@/core/Store'
 import { icoPath } from '@/index'
+import { getConfig } from '@/utils'
 type Xy = [number, number]
-const store = new Store()
 export const isExpire = (expire: number): boolean => expire != new Date().setHours(0, 0, 0, 0)
 export const setcounts = (count: number, account: string): void => {
   const config = store.get('config') as any
@@ -19,6 +19,7 @@ export const setcounts = (count: number, account: string): void => {
     }
   })
   store.set('config', config)
+  global.win.webContents.send('updateConfig', getConfig())
 }
 export const getcounts = (account: string) => {
   const { accounts } = store.get('config') as any
@@ -128,7 +129,7 @@ export const useSkill = async ({ skill, equip, jd, lt, sq_index, zb_index, isSpr
     await sleep(300)
   }
 
-  dm.keyPress(KEY[skill])//释放挂机技能
+  dm.keyPress(KEY[skill]) //释放挂机技能
 
   //黑羽快斗 要多次点击r下车 防止飞出泉水
   if (name == '黑羽快斗') {

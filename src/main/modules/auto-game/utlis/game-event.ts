@@ -5,12 +5,12 @@ import Store from 'electron-store'
 import { machineIdSync } from 'node-machine-id'
 import { fetch } from '@/utils/fetch'
 import { getConfig } from '@/utils'
-import {shell} from 'electron'
-import {exec}from "child_process"
+import { shell } from 'electron'
+import { exec } from 'child_process'
 const getAccoutn = () => {
   const { accounts = [] } = getConfig()
   for (const item of accounts) {
-    if (getcounts(item.name) < item.counts) {
+    if (getcounts(item.name!) < item.counts) {
       log(item.name)
       return item
     }
@@ -45,7 +45,6 @@ class GameEvent extends Task {
     return getcounts(this.currentAccoutn?.name)
   }
   set current_count(val) {
-    console.log('val :>> ', val, this.currentAccoutn?.name)
     setcounts(val, this.currentAccoutn?.name)
   }
   async start() {
@@ -85,7 +84,6 @@ class GameEvent extends Task {
     }, 1000)
   }
   async test() {
-    console.log(machineIdSync())
     // this.findGameWindow()
     // dm.setWindowState(this.hwnd, 1)
     this.openGame()
@@ -104,7 +102,7 @@ class GameEvent extends Task {
   }
   jc() {
     //shell.openExternal(getConfig().path) //打开应用
-    console.log(this.current_count++);
+    console.log(this.current_count++)
   }
   on(eventName: string, cb: any) {
     this._callbacks[eventName] = (this._callbacks[eventName] || []).concat(cb)

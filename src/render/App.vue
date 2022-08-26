@@ -6,19 +6,22 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import type { Account, Config } from 'config'
 import { Ref } from 'vue'
 import { closeLoading } from '@/common'
-
+import _ from 'lodash'
 const { sendSync, send, on } = useIpcRenderer()
 closeLoading('apploading')
 const config = ref(sendSync('getConfig').value as Ref<Config>)
 console.log('用户配置', config.value)
 
 const isUserEdit = ref<boolean>(true)
+const saveConfig = _.debounce(() => {
+  send('saveConfig', JSON.parse(JSON.stringify(config.value)))
+}, 3000)
 
 watch(
   config,
   () => {
     if (isUserEdit.value) {
-      send('saveConfig', JSON.parse(JSON.stringify(config.value)))
+      saveConfig()
     } else {
       isUserEdit.value = true
     }
@@ -34,10 +37,6 @@ on('updateConfig', (_, val) => {
 })
 const matchInfo = ref<Account | any>({})
 
-on('match:update', (e, currentAccoutn) => {
-  console.log('战绩更新')
-  matchInfo.value = currentAccoutn
-})
 const handleWindow = (state: string) => send('onWindow', state)
 
 const tabActiveName = ref('spring')

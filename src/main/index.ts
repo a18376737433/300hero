@@ -65,7 +65,6 @@ function createWindow() {
   useMenu()
 }
 
-const updateConfig = () => win.webContents.send('updateConfig', getConfig())
 app.whenReady().then(() => {
   //禁止重复运行
   if (!app.requestSingleInstanceLock()) {
@@ -77,9 +76,6 @@ app.whenReady().then(() => {
   global.win = win
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-  app.on('browser-window-focus', () => {
-    updateConfig()
   })
 })
 

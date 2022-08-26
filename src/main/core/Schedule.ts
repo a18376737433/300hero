@@ -46,6 +46,10 @@ export class Schedule {
     }
   }
   private log(msg: string, time: any) {
+    if (!time) {
+      log(`[关闭定时任务]`)
+      return
+    }
     log(`[更新定时任务] ${msg}`, new Date(time).toLocaleTimeString().slice(0, 5))
   }
 }

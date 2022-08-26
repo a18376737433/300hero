@@ -52,7 +52,7 @@ export default <Config>{
   path: '',
   qs: {
     role: [
-      { equip: [1, 'f'], hou: ['鸡刀', '雷霆'], name: '康娜', skill: 'r' },
+      { equip: [1, 'f'], hou: ['鸡刀'], name: '康娜', skill: 'r' },
       { equip: [], hou: [], name: '塞巴斯蒂安' },
       { equip: [], hou: [], name: '黑羽快斗', skill: 'r', isSpring: true },
       { equip: [], hou: [], name: '八神疾风', skill: 'r', isSpring: true }
