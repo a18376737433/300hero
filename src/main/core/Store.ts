@@ -7,8 +7,6 @@ const optinos: Store.Options<Record<string, any>> = {
     config
   }
 }
-if (!is_dev) {
-  optinos.cwd = resolve(__dirname, '../../')
-}
+
 const store = new Store(optinos)
 export default store
