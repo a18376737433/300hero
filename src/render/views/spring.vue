@@ -111,11 +111,12 @@ const handleTimePicker = (vl) => {
   <div class="draggable-pust" @click="pushAccountItem">
     <el-icon color="#409eff"><circle-plus /></el-icon>
   </div>
-  <div style="margin-top: 20px" class="flex items-center">
+  <div class="mt-8 text-sm text-red-500">战法放在背包里第一个 鸡刀放在第二个 雷霆放在第三个(没有可以不放)</div>
+  <div class="flex items-center">
     <div class="flex items-center">神器在<span style="color: #5352ed">装备栏</span>的位置 <el-input style="width: 55px" v-model="config.qs.zb_index" /></div>
-    <div class="flex items-center">雷霆在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" v-model="config.qs.lt_index" /></div>
-    <div class="flex items-center">鸡刀在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" v-model="config.qs.jd_index" /></div>
     <div class="flex items-center">神器在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" v-model="config.qs.sq_index" /></div>
+    <div class="flex items-center">鸡刀在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" v-model="config.qs.jd_index" /></div>
+    <div class="flex items-center">雷霆在<span style="color: #2ed573">背包</span>的位置 <el-input style="width: 55px" v-model="config.qs.lt_index" /></div>
   </div>
   <div class="flex items-center">
     <el-checkbox v-model="config.qs.stateDefend" name="type" />
