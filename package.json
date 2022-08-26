@@ -2,7 +2,7 @@
   "name": "300hero",
   "productName": "300英雄助手",
   "description": "300英雄助手",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "main": "dist/main/index.js",
   "author": "Plusl",
   "license": "MIT",
