@@ -1,4 +1,4 @@
-import * as dm from '@/modules/dm'
+import * as dm from '@/core/Dm'
 import XY from '@/modules/auto-game/utlis/xy'
 import { sleep, msg, getcounts } from '@/modules/auto-game/utlis'
 export async function useLogin(hwnd) {
@@ -19,15 +19,16 @@ export async function useLogin(hwnd) {
       if (name) {
         dm.moveTo(...XY['zh'].xy)
         dm.leftDoubleClick()
+        await sleep(1000)
         dm.sendString(hwnd, name)
-        await sleep(500)
       }
+      await sleep(1000)
       if (password) {
         //输入密码
         dm.moveTo(...XY['mm'].xy)
         dm.leftDoubleClick()
+        await sleep(1000)
         dm.sendString(hwnd, password)
-        await sleep(500)
       }
       //点击登录
       dm.moveTo(...XY['jryx'].xy)
@@ -36,7 +37,7 @@ export async function useLogin(hwnd) {
       return
     }
     if (i == accounts.length - 1) {
-      msg('今日游戏次数已用完')
+      msg('打完收工')
       this.stop()
     }
   }

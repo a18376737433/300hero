@@ -1,67 +1,46 @@
 import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join, resolve } from 'path'
 import is_dev from 'electron-is-dev'
-import schedule from 'node-schedule'
 import dotenv from 'dotenv'
-import Store from 'electron-store'
-import { useMenu } from '@/modules/menu'
-import { useTray } from '@/modules/tray'
-import AutoUpdate from '@/modules/autoUpdate'
-import { useGlobalShortcut } from '@/modules/globalShortcut'
+import { useTray } from '@/core/Tray'
+import { useMenu } from '@/core/Menu'
+import store from '@/core/Store'
+import { useAppUpdater } from '@/core/AutoUpdate'
+import { useGlobalShortcut } from '@/core/GlobalShortcut'
+import { Schedule } from '@/core/Schedule'
 import game from '@/modules/auto-game'
-import { getcounts, isExpire } from '@/modules/auto-game/utlis'
+import { getcounts, isExpire, log, msg } from '@/modules/auto-game/utlis'
+import { getConfig, formatJobTime } from '@/utils'
+import { Config } from '../../config'
 
-!is_dev && new AutoUpdate()
+const job = new Schedule() //定时任务
 
-const job = schedule.scheduleJob('9 * * * *', function (firDate) {
-  console.log('The answer to life, the universe, and everything!' + firDate)
-})
 const getPublicFile = (is_dev: boolean, file: string): string => {
-  return is_dev ? resolve(__dirname, `../../src/render/public/${file}`) : resolve(__dirname, `../render/${file}`)
+  const path = is_dev ? `../../src/render/public/${file}` : `../render/${file}`
+  return resolve(__dirname, path)
 }
-export const icoPath = getPublicFile(is_dev, '1.ico')
+export const icoPath = getPublicFile(is_dev, 'trayIcon.ico')
 dotenv.config({ path: join(__dirname, '../../.env') })
+
+ipcMain.on('saveConfig', async (_, config) => {
+  const { jobTime: oldJobTime, shutdown: oldShutdown } = getConfig()
+  store.set('config', config)
+  //更新定时任务
+  job.update([oldJobTime, oldShutdown])
+})
 ipcMain.on('onWindow', (e, state) => {
   game[state] && game[state]()
-  // switch (state) {
-  //   case 'start':
-  //     game.start()
-  //     break
-  //   case 'stop':
-  //     game.stop()
-  //     break
-  //   default:
-  //     game.test()
-  //     break
-  // }
 })
-const store = new Store()
-ipcMain.on('store:set', async (e, { key, value }) => {
-  store.set(key, value)
+ipcMain.on('getConfig', (e) => {
+  const config = store.get('config') as Config
+  config?.accounts.forEach((item) => {
+    if (isExpire(item.expire!)) {
+      item.current_count = 0
+    }
+  })
+  e.returnValue = config
 })
-ipcMain.on('store:get', (e, name) => {
-  if (name == 'counts') {
-    e.returnValue = getcounts(game.currentAccoutn.name)
-    return
-  }
-  if (name == 'config') {
-    const config: any = store.get(name)
-    config.accounts?.forEach((account) => {
-      if (isExpire(account.expire)) {
-        account.current_count = 0
-      }
-    })
-    e.returnValue = config
-    return
-  }
-  e.returnValue = store.get(name)
-})
-// ipcMain.handle('store:get', (e, args) => {
-//   return store.get(args)
-// })
-ipcMain.on('store:delete', async (e, args) => {
-  store.delete(args)
-})
+
 let win: BrowserWindow
 function createWindow() {
   win = new BrowserWindow({
@@ -80,15 +59,19 @@ function createWindow() {
     : `file://${join(__dirname, '../../dist/render/index.html')}` // vite 构建后的静态文件地址
   win.loadURL(URL)
   is_dev && win.webContents.openDevTools()
+  useAppUpdater()
   useTray(win)
   useGlobalShortcut(win)
-  is_dev && useMenu()
-  // win.on('minimize', () => {
-  //   win.hide()
-  // })
+  useMenu()
 }
 
 app.whenReady().then(() => {
+  //禁止重复运行
+  if (!app.requestSingleInstanceLock()) {
+    msg('已经打开过一个了', '重复运行')
+    app.quit()
+  }
+
   createWindow()
   global.win = win
   app.on('activate', function () {
@@ -99,4 +82,4 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
-app.setAppUserModelId(app.getName() || '300hero')
+app.setAppUserModelId(app.getName() || '300英雄助手')

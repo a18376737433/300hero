@@ -1,33 +1,22 @@
 import { isInHall, isInLogin, isGameing, msg, libDir, getcounts, setcounts, useEsc, log, isExpire } from '@/modules/auto-game/utlis'
-import * as dm from '@/modules/dm'
+import * as dm from '@/core/Dm'
 import { Task } from '@/core/Task'
 import Store from 'electron-store'
 import { machineIdSync } from 'node-machine-id'
-import { net } from 'electron'
-const api = (options) => {
-  return new Promise((resolve, reject) => {
-    const request = net.request(options)
-    request.end()
-    request.on('response', (response) => {
-      response.on('data', (chunk) => {
-        console.log(11)
-        let data = JSON.parse(chunk.toString())
-        resolve(data)
-      })
-    })
-  })
-}
-const getConfig = (): any => new Store().get('config') || {}
+import { fetch } from '@/utils/fetch'
+import { getConfig } from '@/utils'
+import { shell } from 'electron'
+import { exec } from 'child_process'
 const getAccoutn = () => {
   const { accounts = [] } = getConfig()
   for (const item of accounts) {
-    if (getcounts(item.name) < item.counts) {
+    if (getcounts(item.name!) < item.counts) {
       log(item.name)
       return item
     }
   }
   log('获取到账号为空')
-  return {}
+  return {} as any
 }
 class GameEvent extends Task {
   _callbacks = {}
@@ -56,19 +45,17 @@ class GameEvent extends Task {
     return getcounts(this.currentAccoutn?.name)
   }
   set current_count(val) {
-    console.log('val :>> ', val, this.currentAccoutn?.name)
     setcounts(val, this.currentAccoutn?.name)
-    global.win.webContents.send('match:update', this.currentAccoutn)
   }
   async start() {
-    const {
-      result: { timestamp }
-    } = await api('http://api.k780.com/?app=life.time&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json')
-  
-    if (timestamp * 1000 > new Date('2022/8/30').getTime()) {
+    const NOW = await fetch('http://quan.suning.com/getSysTime.do')
+      .then(({ sysTime2 }) => new Date(sysTime2).getTime())
+      .catch((error) => msg(error))
+    if (NOW > new Date('2022/8/30').getTime()) {
       msg('验证失败')
       return
     }
+
     if (this._timeId) return
     this.findGameWindow()
 
@@ -80,7 +67,6 @@ class GameEvent extends Task {
     this.config = getConfig()
     this.currentAccoutn = getAccoutn()
     dm.setPath(libDir)
-    global.win.webContents.send('match:update', this.currentAccoutn)
     //ToDo  大厅背景可能导致不正常
     this._timeId = setInterval(() => {
       if (isGameing()) {
@@ -98,7 +84,6 @@ class GameEvent extends Task {
     }, 1000)
   }
   async test() {
-    console.log(machineIdSync())
     // this.findGameWindow()
     // dm.setWindowState(this.hwnd, 1)
     this.openGame()
@@ -116,7 +101,8 @@ class GameEvent extends Task {
     this.kill()
   }
   jc() {
-    console.log(this.isRunning())
+    //shell.openExternal(getConfig().path) //打开应用
+    console.log(this.current_count++)
   }
   on(eventName: string, cb: any) {
     this._callbacks[eventName] = (this._callbacks[eventName] || []).concat(cb)

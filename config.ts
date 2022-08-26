@@ -1,9 +1,9 @@
 export interface Account {
-  name: string
-  password: string
+  name?: string
+  password?: string
   counts: number
-  dieQuit: boolean
-  randomRole: boolean
+  dieQuit?: boolean
+  randomRole?: boolean
   current_count?: number
   expire?: number
 }
@@ -38,13 +38,25 @@ export interface Config {
   path: string
   accounts: Account[]
   qs: QsOptions
+  jobTime?: any
+  shutdown?: any
 }
 export default <Config>{
-  accounts: [],
+  accounts: [
+    {
+      counts: 50,
+      dieQuit: true
+    }
+  ],
   mode: 'zc',
   path: '',
   qs: {
-    role: [{ equip: [1, 'f'], hou: ['鸡刀', '雷霆'], name: '康娜', skill: 'r' }],
+    role: [
+      { equip: [1, 'f'], hou: ['鸡刀'], name: '康娜', skill: 'r' },
+      { equip: [], hou: [], name: '塞巴斯蒂安' },
+      { equip: [], hou: [], name: '黑羽快斗', skill: 'r', isSpring: true },
+      { equip: [], hou: [], name: '八神疾风', skill: 'r', isSpring: true }
+    ],
 
     //随机英雄
     isRandom: false,
@@ -67,8 +79,8 @@ export default <Config>{
     equip: [1, 2],
     //猴戏装备位置
     zb_index: 2,
-    sq_index: 19,
-    lt_index: 14,
-    jd_index: 13
+    sq_index: 1,
+    jd_index: 2,
+    lt_index: 3
   }
 }

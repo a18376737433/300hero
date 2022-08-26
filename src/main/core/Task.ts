@@ -1,8 +1,7 @@
 import { execSync, exec } from 'child_process'
 import { log } from '../modules/auto-game/utlis/index'
 import url from 'url'
-import Store from 'electron-store'
-const getConfig = (): any => new Store().get('config') || {}
+import { getConfig } from '@/utils'
 export class Task {
   constructor() {}
   
@@ -18,7 +17,6 @@ export class Task {
       .split('\n')
       .map((line) => line.trim().split(/\s+/))
       .filter((line) => line[0] === name)[0]
-    console.log(name, task?.[1])
     if (!task) return null
 
     return +task[1]

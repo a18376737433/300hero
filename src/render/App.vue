@@ -1,63 +1,49 @@
 <script setup lang="ts">
 import account from './views/account.vue'
 import spring from './views/spring.vue'
-import default_config from '@@/config'
 import { useIpcRenderer } from '@vueuse/electron'
-import type { Account } from 'config'
-
-const loaded = () => {
-  const appLoading = document.getElementById('apploading')
-  if (appLoading) appLoading.style.display = 'none'
-}
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import type { Account, Config } from 'config'
+import { Ref } from 'vue'
+import { closeLoading } from '@/common'
+import _ from 'lodash'
 const { sendSync, send, on } = useIpcRenderer()
-const preConfig = sendSync('store:get', 'config')
-const config = reactive(Object.assign({}, default_config, preConfig.value))
+closeLoading('apploading')
+const config = ref(sendSync('getConfig').value as Ref<Config>)
+console.log('用户配置', config.value)
 
-console.log('用户配置', config)
+const isUserEdit = ref<boolean>(true)
+const saveConfig = _.debounce(() => {
+  send('saveConfig', JSON.parse(JSON.stringify(config.value)))
+}, 3000)
 
-loaded()
-watch(config, () => {
-  send('store:set', {
-    key: 'config',
-    value: JSON.parse(JSON.stringify(config))
-  })
-  console.log('储存变动配置')
-})
-//监听main的快捷键事件
-on('shortcut_key', (e, { key }) => {
-  switch (key) {
-    case 'f1':
-      handleWindow('start')
-      break
-    case 'f2':
-      handleWindow('stop')
-      break
-    default:
-      console.log('未注册的键盘事件')
-      break
+watch(
+  config,
+  () => {
+    if (isUserEdit.value) {
+      saveConfig()
+    } else {
+      isUserEdit.value = true
+    }
+  },
+  {
+    deep: true
   }
-})
+)
 
+on('updateConfig', (_, val) => {
+  isUserEdit.value = false
+  config.value = val
+})
 const matchInfo = ref<Account | any>({})
 
-on('match:update', (e, currentAccoutn) => {
-  matchInfo.value = currentAccoutn
-})
-const handleWindow = (state) => {
-  if (state === 'start') {
-    send('store:set', {
-      key: 'config',
-      value: JSON.parse(JSON.stringify(config))
-    })
-  }
-  send('onWindow', state)
-}
+const handleWindow = (state: string) => send('onWindow', state)
 
 const tabActiveName = ref('spring')
 </script>
 
 <template>
-  <el-config-provider size="large">
+  <el-config-provider size="large" :locale="zhCn">
     <div class="main px-1 py-2 overflow-auto h-full">
       <h4 class="py-2" v-if="Object.keys(matchInfo).length">
         <span>当前局数:{{ matchInfo.current_count }}</span>
