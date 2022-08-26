@@ -2,18 +2,19 @@ import schedule from 'node-schedule'
 import { log } from '@/modules/auto-game/utlis'
 import { getConfig, formatJobTime } from '@/utils'
 import game from '@/modules/auto-game'
-
+import _ from 'lodash'
+import { exec } from 'child_process'
 const createJob = (time, cb) => {
   if (!time) return null
   return schedule.scheduleJob(formatJobTime(time), cb)
 }
 const createRunJob = (time) =>
   createJob(time, () => {
-    game.test()
+    game.start()
   })
 const createShutdownJob = (time) =>
   createJob(time, () => {
-    console.log('????????????')
+    exec('shutdown -s -t 0')
   })
 export class Schedule {
   runJob: any
@@ -30,7 +31,6 @@ export class Schedule {
       this.shutdownJob = createShutdownJob(shutdown)
     }
   }
-
   update([oldJobTime, oldShutdown]) {
     const { jobTime, shutdown } = getConfig()
     if (oldJobTime !== jobTime) {

@@ -90,30 +90,7 @@ export const isCdOk = (skill) => {
   }
   return !!dm.dll.IsDisplayDead(...skillXY[skill])
 }
-export const KN_R = async () => {
-  dm.keyPress(KEY['t'])
-  await sleep(300)
-  leftClick(...XY['qbzb'].xy)
-  //切换雷霆 start
-  unEquip(2)
-  await sleep(300)
-  clickPack(14)
-  //切换雷霆 end
-  dm.keyPress(KEY['r'])
-  await sleep(500)
 
-  unEquip(2) //下 雷霆
-  await sleep(600)
-  clickPack(13) //装备 鸡刀
-  await sleep(300)
-  useProp(1) //装备 鬼索
-  await sleep(3500)
-  unEquip(2) //下 鬼索
-  await sleep(300)
-  clickPack(19) //装备 战法
-  await sleep(300)
-  dm.keyPress(KEY['t'])
-}
 export const useSkill = async ({ skill, equip, jd, lt, sq_index, zb_index, isSpring, name, color }, isDebug) => {
   type XyMap = {
     [name: string]: [number, number]
@@ -150,7 +127,10 @@ export const useSkill = async ({ skill, equip, jd, lt, sq_index, zb_index, isSpr
     dm.moveTo(...offset[color]) //基于水晶的偏移量
     await sleep(300)
   }
-  dm.keyPress(KEY[skill])
+
+  dm.keyPress(KEY[skill])//释放挂机技能
+
+  //黑羽快斗 要多次点击r下车 防止飞出泉水
   if (name == '黑羽快斗') {
     await sleep(1100)
     dm.keyPress(KEY[skill])
@@ -158,17 +138,7 @@ export const useSkill = async ({ skill, equip, jd, lt, sq_index, zb_index, isSpr
     dm.keyPress(KEY[skill])
   }
 
-  //console.log(KEY[skill])
-  // await sleep(250)
-  // dm.keyPress(KEY[skill])
-  // console.log(KEY[skill])
-  // await sleep(250)
-  // dm.keyPress(KEY[skill])
-  // console.log(KEY[skill])
-  // await sleep(100)
-  // dm.keyPress(KEY[skill])
-  // console.log(KEY[skill])
-  if (jd || lt) {
+  if (lt) {
     await sleep(400)
     unEquip(zb_index)
   }

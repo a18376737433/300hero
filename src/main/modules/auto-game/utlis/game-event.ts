@@ -5,7 +5,8 @@ import Store from 'electron-store'
 import { machineIdSync } from 'node-machine-id'
 import { fetch } from '@/utils/fetch'
 import { getConfig } from '@/utils'
-
+import {shell} from 'electron'
+import {exec}from "child_process"
 const getAccoutn = () => {
   const { accounts = [] } = getConfig()
   for (const item of accounts) {
@@ -102,7 +103,8 @@ class GameEvent extends Task {
     this.kill()
   }
   jc() {
-    console.log(this.isRunning())
+    //shell.openExternal(getConfig().path) //打开应用
+    console.log(this.current_count++);
   }
   on(eventName: string, cb: any) {
     this._callbacks[eventName] = (this._callbacks[eventName] || []).concat(cb)
