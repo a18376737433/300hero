@@ -79,8 +79,8 @@ const tabActiveName = ref('spring')
         <el-button plain type="primary" @click="handleWindow('start')">开始(F1)</el-button>
         <el-button plain type="danger" @click="handleWindow('stop')">停止(F2)</el-button>
         <el-button plain type="success" @click="handleWindow('test')">启动GAME</el-button>
-        <el-button plain type="success" @click="handleWindow('gb')">关闭GAME</el-button>
-        <el-button plain type="success" @click="handleWindow('jc')">检测GAME</el-button>
+        <!-- <el-button plain type="success" @click="handleWindow('gb')">关闭GAME</el-button>
+        <el-button plain type="success" @click="handleWindow('jc')">检测GAME</el-button> -->
       </div>
     </div>
   </el-config-provider>

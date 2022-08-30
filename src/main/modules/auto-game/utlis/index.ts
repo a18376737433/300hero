@@ -19,7 +19,7 @@ export const setcounts = (count: number, account: string): void => {
     }
   })
   store.set('config', config)
-  global.win.webContents.send('updateConfig', getConfig())
+  global.win?.webContents.send('updateConfig', getConfig())
 }
 export const getcounts = (account: string) => {
   const { accounts } = store.get('config') as any
@@ -115,7 +115,7 @@ export const useSkill = async ({ skill, equip, jd, lt, sq_index, zb_index, isSpr
 
   //y 点水晶 移动鼠标  放r y0
   if (jd || lt) {
-    dm.keyPress(KEY['t'])
+    dm.keyPress(KEY['o'])
     await sleep(1000)
     leftClick(...XY['qbzb'].xy)
     await sleep(300)
@@ -161,7 +161,7 @@ export const useSkill = async ({ skill, equip, jd, lt, sq_index, zb_index, isSpr
     await sleep(300)
     clickPack(sq_index)
     await sleep(300)
-    dm.keyPress(KEY['t'])
+    dm.keyPress(KEY['o'])
   }
 
   if (isSpring) {
