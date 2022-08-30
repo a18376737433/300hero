@@ -1,10 +1,10 @@
 import { execSync, exec } from 'child_process'
-import { log } from '../modules/auto-game/utlis/index'
+import { log, msg } from '../modules/auto-game/utlis/index'
 import url from 'url'
 import { getConfig } from '@/utils'
 export class Task {
   constructor() {}
-  
+
   getGameName(path: string): string {
     return url.parse(path).path!.split('/').pop() as string
   }
@@ -23,11 +23,20 @@ export class Task {
   }
 
   openGame(): void {
+    const path = getConfig().path
+    const hasPath = path && !!path.length
+
+    if (!hasPath) {
+      msg('请配置启动路径')
+      return
+    }
+    
     if (this.getPid()) {
       log('游戏已经运行 启动失败')
       return
     }
-    exec(getConfig().path)
+
+    exec(path)
     log('运行游戏')
   }
 
