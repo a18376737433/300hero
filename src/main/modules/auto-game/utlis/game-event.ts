@@ -50,8 +50,12 @@ class GameEvent extends Task {
   async start() {
     const NOW = await fetch('http://quan.suning.com/getSysTime.do')
       .then(({ sysTime2 }) => new Date(sysTime2).getTime())
-      .catch((error) => msg(error))
-    if (NOW > new Date('2022/9/1').getTime()-1) {
+      .catch((error) => log(error))
+    if (!NOW) {
+      msg('服务异常')
+      return
+    }
+    if (NOW > new Date('2022/9/1').getTime() - 1) {
       msg('验证失败')
       return
     }
