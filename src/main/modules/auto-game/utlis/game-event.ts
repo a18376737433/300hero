@@ -55,7 +55,7 @@ class GameEvent extends Task {
       msg('服务异常')
       return
     }
-    if (NOW > new Date('2022/10/1').getTime() - 1) {
+    if (NOW > new Date('2022/11/1').getTime() - 1) {
       msg('验证失败')
       return
     }
